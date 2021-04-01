@@ -1,0 +1,2529 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Jonny & the Stick</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href='http://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet'>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <style>
+            @font-face {
+            font-family: Start;
+            src: url(../../../DinoApp/fontsDino/PressStart2P.ttf);
+        /*font-family: 'Press Start 2P', cursive;*/
+            }
+            
+    body {
+        padding:0;
+        margin:0;
+        background:grey;
+    }
+    img {
+        display:block;
+        margin:30px auto 30px;
+    }
+    canvas {
+        display:block;
+        margin:30px auto 0;
+        border:1px solid #ccc;
+        background:#000;
+    }
+    @media screen and (max-width: 600px) {
+        canvas {
+        }
+    }
+        </style>
+    <script>
+    var ctx,
+            width = 600,
+            height = 600,
+            mainButtColor = 'red',
+            buttonColorTL = "darkgreen",
+            buttonColorML = "darkgreen",
+            buttonColorBL = "darkgreen",
+            buttonColorTR = "darkgreen",
+            buttonColorMR = "darkgreen",
+            buttonColorBR = "darkgreen",
+            gameStarted = false,
+            snack = false,
+            atPark = false,
+            forest = false,
+            playground = false,
+            picnic = false,
+            sally = false, sallySaid = ['"Pleasha Joey"','"Pleasha JoJo"','"Mmm Hmm JoJo"','"Kindly Johny"','"Welcome JoJo"','"Pleasha JoJo"'],
+            feild = false, sallySays = ['"Morthan That"','"Mayba Lata J"','"Cana do ya J"','"Onla Cane JJ"','"Sweeta Shuga"'],
+            court = false, sallyHey = ['Evn'+"'"+'n','Hiya!','Howda','Heya!'], sallyHi = 'Hiya!',
+            IMmenu = false,
+            ANImenu = false,
+            ELEmenu = false,
+            stick = "",
+            stickIS = "",
+            pickUpStick = false,
+            JoFullHealth = 15,
+            JoHealth = 15,
+            JoAttack = 5,
+            JoDefense = 5,
+            JoDodge = 5,
+            Level = 1,
+            didLevel = false,
+            IM = 1,
+            CDY = 10,
+            IMneededSTK = 3,
+            IMneededANI = 1,
+            IMneededELE = 1,
+            ELE = '', ELEment = '',
+            eleSelected = false,
+            ANI = '',
+            ANI_is = "",
+            aniSelected = false,
+            exp = 0,
+            neededExp = 10,
+            expDay = 0,
+            fightClicks = 0,
+            dodged = false,
+            runFail = false,
+            lostFight = false,
+            fighting = false,
+            Jotxt = "",
+            JotxtColor = 'white',
+            JotxtLvl = "",
+            Entxt = "",
+            candytxt = "",
+            redIM = "",
+            JoDamage = 0,
+            enDamage = 0,
+            //Jo Base Level Up
+            healthBo = 4,
+            attackBo = 1,
+            defenseBo = 1,
+            dodgeBo = 1,
+            //////
+            enemy = "",
+            monsterPicked = false,
+            enFullHealth = 10,
+            enBasAttack = 3,
+            enBasDefense = 3,
+            enBasDodge = 3,
+            enHealth = 10,
+            enAttack = 3,
+            enDefense = 3,
+            enDodge = 3,
+            enDodged = false,
+            //Enemy Base Level Up
+            healthEn = 4,
+            attackEn = 1,
+            defenseEn = 1,
+            dodgeEn = 1,
+            //////
+            nightmare = false,
+            fear1 = false,
+            fear2 = false,
+            fear3 = false,
+            fear4 = false,
+            fear5 = false,
+            fear6 = false,
+            NightFuel = 0,
+            DreamReam = 0,
+            day = 1,
+            frequency = 300,
+            GameOver = false,
+            GameEnd = false,
+            WakeUp = 'Fight!';
+    
+    function init(){  
+    canvas = document.getElementById('canvas');
+    ctx = canvas.getContext('2d');
+    
+    D8 = new Image();
+    D8.src = '../../../DinoApp/JonnyMedia/D8DT-Logo.png';
+    CCC = new Image();
+    CCC.src = '../../../DinoApp/JonnyMedia/CamCo.png';
+    gameLoop();
+    
+    
+    }
+    
+    function clearCanvas() {
+    ctx.clearRect(0, 0, width, height);
+}
+    function gameLoop(){
+        clearCanvas();
+        canvas.addEventListener('mousemove', hoverEffects, false);
+            //Top text box
+            ctx.beginPath();
+            ctx.lineWidth = "6";
+            ctx.strokeStyle = "white";
+            ctx.rect(width / 35, height / 35, 565, 125);
+            ctx.stroke();
+            
+            //////Middle interface
+ //           if(!didLevel){
+            ctx.fillStyle = JotxtColor;
+            ctx.fillText(Jotxt, width/2 -105, height/2 + 45);
+            ctx.fillStyle = 'red';
+            ctx.fillText(Entxt, width/2 -105, height/2 + 70);
+            ctx.fillStyle = 'HotPink';
+            ctx.fillText(candytxt, width/2 - 105, height/2 + 95);
+//           } else {}
+            //Bottom interface button box
+            ctx.beginPath();
+            ctx.lineWidth = "6";
+            ctx.strokeStyle = "white";
+            ctx.rect(width / 35, height / 1.47, 565, 175);
+            ctx.stroke();
+            
+            //Main button BIG RED
+            ctx.beginPath();
+            ctx.lineWidth = "6";
+            ctx.fillStyle = mainButtColor;
+            ctx.arc(width/2, height/2 + 195, 70, 0, 2*Math.PI);
+            ctx.fill();
+            
+            //Green butt
+            ctx.beginPath();
+            //TR
+            ctx.fillStyle = buttonColorTR;
+            ctx.fillRect(width/2 + 75, height/2 + 125, 125, 33);
+            //MR
+            ctx.fillStyle = buttonColorMR;
+            ctx.fillRect(width/2 + 90, height/2 + 177, 125, 33);
+            //BR
+            ctx.fillStyle = buttonColorBR;
+            ctx.fillRect(width/2 + 75, height/2 + 230, 125, 33);
+            //TL
+            ctx.fillStyle = buttonColorTL;
+            ctx.fillRect(width/2 - 200, height/2 + 125, 125, 33);
+            //ML
+            ctx.fillStyle = buttonColorML;
+            ctx.fillRect(width/2 - 215, height/2 + 177, 125, 33);
+            //BL
+            ctx.fillStyle = buttonColorBL;
+            ctx.fillRect(width/2 - 200, height/2 + 230, 125, 33);
+            ctx.stroke();
+            
+            //Game Screens
+            //Title Page
+            gameTitle();/////////////////////////////////////////////////
+            //gameEnd(); For testing
+            //"Home" interface
+            if(GameOver){
+                gameOver();
+                gameStarted = false;
+            }
+            else if (GameEnd){
+                gameEnd();
+                gameStarted = false;
+            }
+            else if(gameStarted && !atPark && !IMmenu){
+                home();
+            }
+            else if (gameStarted && !atPark && IMmenu){
+                IMdisplay();
+            }
+            //Park interface
+            else if(atPark && sally){
+                sallysShop();
+            }
+            else if(atPark){
+                park();
+                levelText();
+            }
+            
+            
+            
+            if (gameStarted == true){
+                status();
+            }
+            if (gameStarted && atPark && pickUpStick && (forest || playground || feild || court || nightmare)) {
+                fightButt();
+                enStats();
+                fightText();
+            }
+            if (picnic) { //exception for JoDamage (or heal amount from candy)
+                fightText();
+            }
+        game = setTimeout(gameLoop, 1000 / 30);
+    }
+    
+    function gameTitle() {
+        if (!gameStarted && !GameOver && !GameEnd) {
+        //Top Box to explain game
+        ctx.font = 'bold 16px Start';
+        ctx.fillStyle = 'white';
+        ctx.fillText('', width / 2 - 265, height / 2 - 250);
+        ctx.fillText('     D8Dt.com   &   CamCorn', width / 2 - 265, height / 2 - 225);
+        ctx.fillText('             present', width / 2 - 265, height / 2 - 190);
+        ctx.font = 'bold 8px Start';
+        ctx.fillText('        ©', width / 2 - 265, height / 2 - 190);
+        
+        ctx.drawImage(D8,width / 2 - 265, height / 2 - 260);
+        ctx.drawImage(CCC,width / 2 + 175, height / 2 - 270);
+        //Middle, displays title
+        ctx.font = 'bold 60px Start';
+        ctx.fillStyle = 'white';
+        ctx.fillText('Jonny', width / 2 - 145, height / 2.7);
+        ctx.font = 'bold 40px Start';
+        ctx.fillStyle = 'DarkGoldenrod';
+        ctx.fillText('and the', width / 2 - 140, height / 2.10);
+        ctx.font = 'bold 60px Start';
+        ctx.fillStyle = 'white';
+        ctx.fillText('Stick', width / 2 - 145, height / 1.6);
+        ctx.font = 'bold 16px Start';
+        ctx.fillText('™', width / 2 + 160, height / 1.6);
+        //Button Start! //Holds interface
+        ctx.font = 'bold 20px Start';
+        ctx.fillStyle = 'white';
+        ctx.fillText('Start!', width / 2 - 57, height / 2 + 200);
+        
+        canvas.addEventListener('click', mainButton, false);
+        
+        }
+    }
+    
+    function gameOver(){
+        resettxt();
+        ctx.font = 'bold 16px Start';
+        ctx.fillStyle = 'white';
+        ctx.fillText('Young Jonny did not come home', width / 2 - 265, height / 2 - 250);
+        ctx.fillText('that night. All that was found', width / 2 - 265, height / 2 - 225);
+        ctx.fillText('of him was his favorite stick', width / 2 - 265, height / 2 - 200);
+        ctx.fillText('and a day old snack.', width / 2 - 265, height / 2 - 175);
+        ctx.font = 'bold 60px Start';
+        ctx.fillStyle = 'white';
+        ctx.fillText('GAME', width / 2 - 115, height / 2 - 35);
+        ctx.font = 'bold 60px Start';
+        ctx.fillStyle = 'red';
+        ctx.fillText('OVER', width / 2 - 115, height / 2 + 35);
+    }
+    function gameEnd(){
+        resettxt();
+        ctx.textAlign="left";
+        ctx.font = 'bold 16px Start';
+        ctx.fillStyle = 'yellow';
+        ctx.fillText('Young Jonny came home that night.', width / 2 - 265, height / 2 - 250);
+        ctx.fillText('His fears gone, his soul whole,', width / 2 - 265, height / 2 - 225);
+        ctx.fillText('his mind about him. His Mom made', width / 2 - 265, height / 2 - 200);
+        ctx.fillText('him a snack his Dad tucked him in', width / 2 - 265, height / 2 - 175);
+        ctx.textAlign="center";
+        ctx.fillText('with Jonny'+"'s"+' Stick beside him', width / 2, height / 2 - 120);
+        ctx.font = 'bold 60px Start';
+        ctx.fillStyle = 'white';
+        ctx.fillText('THE', width / 2, height / 2 - 25); 
+        ctx.font = 'bold 60px Start';
+        ctx.fillStyle = 'red';
+        ctx.fillText('END?', width / 2 + 20, height / 2 + 50);
+        ctx.textAlign="left";
+    }
+    
+    function home() {
+        JoHealth = JoFullHealth;
+        expDay = 0;
+        if(gameStarted && !atPark && day == 1){
+            //Day 1 text
+            ctx.font = 'bold 16px Start';
+            ctx.fillStyle = 'white';
+            ctx.fillText('You are young Jonny. You wake up', width / 2 - 265, height / 2 - 250);
+            ctx.fillText('and want to go play at the park.', width / 2 - 265, height / 2 - 225);
+            ctx.fillText('Summer has started. Before you', width / 2 - 265, height / 2 - 200);
+            ctx.fillText('go do you want to bring a snack?', width / 2 - 265, height / 2 - 175);
+        }
+        else if(gameStarted && !atPark && (day == 10 || day == 20 || day == 30 || day == 40) && (lostFight || !lostFight)){
+            //Day 1 text
+            ctx.font = 'bold 16px Start';
+            ctx.fillStyle = 'red';
+            ctx.fillText('You wake up with a bad feeling', width / 2 - 265, height / 2 - 250);
+            ctx.fillText('in your stomach. Today you are', width / 2 - 265, height / 2 - 225);
+            ctx.fillText('not so sure about the park. You', width / 2 - 265, height / 2 - 200);
+            ctx.fillText('prepare to go anyway.', width / 2 - 265, height / 2 - 175);
+            //IM display
+            ctx.fillStyle = 'yellow';
+            ctx.fillText("IM:", width/2 +170, height/2 - 130);
+            ctx.fillText(IM, width/2 +225, height/2 - 130);
+            ctx.fillText('I.M.', width / 2 + 110, height / 2 + 150);
+        }
+        else if(gameStarted && !atPark && (day == 50) && (lostFight || !lostFight)){
+            //Day 1 text
+            ctx.font = 'bold 16px Start';
+            ctx.fillStyle = 'red';
+            ctx.fillText('You wake up feeling a little', width / 2 - 265, height / 2 - 250);
+            ctx.fillText('sleepy. Something odd is in the', width / 2 - 265, height / 2 - 225);
+            ctx.fillText('air. Your head nods as you try to', width / 2 - 265, height / 2 - 200);
+            ctx.fillText('prepare for the park. Wake up!', width / 2 - 265, height / 2 - 175);
+            //IM display
+            ctx.fillStyle = 'yellow';
+            ctx.fillText("IM:", width/2 +170, height/2 - 130);
+            ctx.fillText(IM, width/2 +225, height/2 - 130);
+            ctx.fillText('I.M.', width / 2 + 110, height / 2 + 150);
+        }
+        else if(gameStarted && !atPark && (day == 60) && (lostFight || !lostFight)){
+            //Day 1 text
+            ctx.font = 'bold 16px Start';
+            ctx.fillStyle = 'red';
+            ctx.fillText('Are you awake? Is it still night?', width / 2 - 265, height / 2 - 250);
+            ctx.fillText('The day is thick with mist, and', width / 2 - 265, height / 2 - 225);
+            ctx.fillText('hazy with vapors. You cautiously', width / 2 - 265, height / 2 - 200);
+            ctx.fillText('fumble in the blur one last time.', width / 2 - 265, height / 2 - 175);
+            //IM display
+            ctx.fillStyle = 'yellow';
+            ctx.fillText("IM:", width/2 +170, height/2 - 130);
+            ctx.fillText(IM, width/2 +225, height/2 - 130);
+            ctx.fillText('I.M.', width / 2 + 110, height / 2 + 150);
+        }
+        else if(gameStarted && !atPark && (day == 11 || day == 21 || day == 31) && (lostFight || !lostFight)){
+            //Day 11 and 21 text win
+            ctx.font = 'bold 16px Start';
+            ctx.fillStyle = 'Yellow';
+            ctx.fillText('You sleep peacfully that night', width / 2 - 265, height / 2 - 250);
+            ctx.fillText('having vanquished your fear.', width / 2 - 265, height / 2 - 225);
+            ctx.fillText('You prepare for another day at', width / 2 - 265, height / 2 - 200);
+            ctx.fillText('the park. Will you bring a snack?', width / 2 - 265, height / 2 - 175);
+            JotxtColor = "yellow";
+            Jotxt = "Boss Defeated!!!";
+            Entxt = "Gained a Level!!";
+            //IM display
+            ctx.fillStyle = 'yellow';
+            ctx.fillText("IM:", width/2 +170, height/2 - 130);
+            ctx.fillText(IM, width/2 +225, height/2 - 130);
+            ctx.fillText('I.M.', width / 2 + 110, height / 2 + 150);
+        }
+        else if(gameStarted && !atPark && (day == 41) && (lostFight || !lostFight)){
+            //Day 11 and 21 text win
+            ctx.font = 'bold 16px Start';
+            ctx.fillStyle = 'Yellow';
+            ctx.fillText('You sleep peacfully that night', width / 2 - 265, height / 2 - 250);
+            ctx.fillText('having conquered Yourself, you', width / 2 - 265, height / 2 - 225);
+            ctx.fillText('prepare to take on your ultimate', width / 2 - 265, height / 2 - 200);
+            ctx.fillText('enemy The Nightmare Dweller...', width / 2 - 265, height / 2 - 175);
+            JotxtColor = "yellow";
+            Jotxt = "Soul is Whole!!!";
+            Entxt = "Gained a Level!!";
+            //IM display
+            ctx.fillStyle = 'yellow';
+            ctx.fillText("IM:", width/2 +170, height/2 - 130);
+            ctx.fillText(IM, width/2 +225, height/2 - 130);
+            ctx.fillText('I.M.', width / 2 + 110, height / 2 + 150);
+        }
+        else if(gameStarted && !atPark && (day == 51) && (lostFight || !lostFight)){
+            //Day 11 and 21 text win
+            ctx.font = 'bold 16px Start';
+            ctx.fillStyle = 'Yellow';
+            ctx.fillText('You struggle to sleep that night', width / 2 - 265, height / 2 - 250);
+            ctx.fillText('having conquered sleep itself. ', width / 2 - 265, height / 2 - 225);
+            ctx.fillText('You know next you will take on ', width / 2 - 265, height / 2 - 200);
+            ctx.fillText('your enemy, The Nightmare Dweller', width / 2 - 265, height / 2 - 175);
+            JotxtColor = "yellow";
+            Jotxt = "Mind is Awoken!!";
+            Entxt = "Gained a Level!!";
+            //IM display
+            ctx.fillStyle = 'yellow';
+            ctx.fillText("IM:", width/2 +170, height/2 - 130);
+            ctx.fillText(IM, width/2 +225, height/2 - 130);
+            ctx.fillText('I.M.', width / 2 + 110, height / 2 + 150);
+        }
+        else if (gameStarted && !atPark && !lostFight) {
+            //Normal Did not die at park
+            ctx.font = 'bold 16px Start';
+            ctx.fillStyle = 'white';
+            ctx.fillText('You wake up ready for another', width / 2 - 265, height / 2 - 250);
+            ctx.fillText('great day at the park. Before', width / 2 - 265, height / 2 - 225);
+            ctx.fillText('you go do you want to bring a', width / 2 - 265, height / 2 - 200);
+            ctx.fillText('snack?', width / 2 - 265, height / 2 - 175);
+            //IM display
+            ctx.fillStyle = 'yellow';
+            ctx.fillText("IM:", width/2 +170, height/2 - 130);
+            ctx.fillText(IM, width/2 +225, height/2 - 130);
+            ctx.fillText('I.M.', width / 2 + 110, height / 2 + 150);
+            
+        }
+        else if (gameStarted && !atPark && lostFight) {
+            //Normal did die at park
+            ctx.font = 'bold 16px Start';
+            ctx.fillStyle = 'purple';
+            ctx.fillText('You wake up battered and broken', width / 2 - 265, height / 2 - 250);
+            ctx.fillText('but ready for a day at the park.', width / 2 - 265, height / 2 - 225);
+            ctx.fillText('Before you go do you want to ', width / 2 - 265, height / 2 - 200);
+            ctx.fillText('bring a snack?', width / 2 - 265, height / 2 - 175);
+            //IM display
+            ctx.fillStyle = 'yellow';
+            ctx.fillText("IM:", width/2 +170, height/2 - 130);
+            ctx.fillText(IM, width/2 +225, height/2 - 130);
+            ctx.fillText('I.M.', width / 2 + 110, height / 2 + 150);
+        }
+
+            //Main Butt-Go to Park
+            ctx.font = 'bold 16px Start';
+            ctx.fillStyle = 'white';
+            ctx.fillText('Go to', width / 2 - 40, height / 2 + 185);
+            ctx.fillText('the Park', width / 2 - 65, height / 2 + 210);
+            //Grab Snack before go?
+            ctx.fillText(' Snack', width / 2 - 195, height / 2 + 150);
+    }
+    
+    function IMdisplay(){
+        ctx.font = 'bold 20px Start';
+        ctx.fillStyle = 'yellow';
+        ctx.fillText(redIM, width / 2 - 30, height / 2 + 200);
+        ctx.fillText(redIMa, width / 2 - 50, height / 2 + 200);
+        //IM point display
+        ctx.font = 'bold 16px Start';
+        ctx.fillStyle = 'yellow';
+        ctx.fillText("IM:", width/2 +170, height/2 - 130);
+        ctx.fillText(IM, width/2 +225, height/2 - 130);
+
+        //Top text
+        ctx.font = 'bold 16px Start';
+        ctx.fillStyle = 'white';
+        ctx.fillText('This is a menu for leveling your', width / 2 - 265, height / 2 - 250);
+        ctx.fillText('Stick and other attributes. ', width / 2 - 265, height / 2 - 225);
+        ctx.fillText('Choose wisely what to advance  ', width / 2 - 265, height / 2 - 200);
+        ctx.fillText('with your IMs.', width / 2 - 265, height / 2 - 175);
+        
+        if(ANImenu && !aniSelected){
+            ctx.fillText('Dog', width / 2 - 160, height / 2 + 150);
+            ctx.fillText('Bird', width / 2 - 185, height / 2 + 203);
+            ctx.fillText('Pony', width / 2 - 170, height / 2 + 255);
+            
+            ctx.fillText('Bear', width / 2 + 110, height / 2 + 150);
+            ctx.fillText('Cow', width / 2 + 130, height / 2 + 203);
+            ctx.fillText('Deer', width / 2 + 110, height / 2 + 255);
+        }
+        else if(ELEmenu && !eleSelected){
+            ctx.fillText('Fire', width / 2 - 170, height / 2 + 150);
+            ctx.fillText('Earth', width / 2 - 190, height / 2 + 203);
+            
+            ctx.fillText('Water', width / 2 + 100, height / 2 + 150);
+            ctx.fillText('Wind', width / 2 + 120, height / 2 + 203);
+        }
+        else {
+            //Upgrade selections
+            ctx.fillText('Stick', width / 2 - 177, height / 2 + 150);
+            ctx.fillText('ANI', width / 2 + 115, height / 2 + 150);
+            ctx.fillText('ELE', width / 2 - 174, height / 2 + 203);
+            ctx.fillStyle = 'yellow';
+                if(IMneededSTK == 11){
+                    ctx.fillText(IMneededSTK, width / 2 - 245, height / 2 + 150); 
+                }
+                else {
+                    ctx.fillText(IMneededSTK, width / 2 - 230, height / 2 + 150);
+                }
+            ctx.fillText(IMneededANI, width / 2 + 215, height / 2 + 150);
+            ctx.fillText(IMneededELE, width / 2 - 245, height / 2 + 203);
+            ctx.fillStyle = 'white';
+            ctx.fillText('Back', width / 2 + 110, height / 2 + 255); 
+        }
+    }
+    
+    function park() {
+        if(day == 1 && !pickUpStick){
+        ctx.font = 'bold 20px Start';
+        ctx.fillStyle = 'yellow';
+        ctx.fillText(redIM, width / 2 - 50, height / 2 + 200);
+            //Day 1 text
+            ctx.font = 'bold 16px Start';
+            ctx.fillStyle = 'white';
+            ctx.fillText('On your way to the park you find', width / 2 - 265, height / 2 - 250);
+            ctx.fillText('a magnificent stick. This stick ', width / 2 - 265, height / 2 - 225);
+            ctx.fillText('could be ANYTHING! What do you', width / 2 - 265, height / 2 - 200);
+            ctx.fillText('imagine it to be?', width / 2 - 265, height / 2 - 175);
+            //Weapon choices
+            ctx.fillText('Sword', width / 2 - 177, height / 2 + 150);
+            ctx.fillStyle = buttonColorML;
+            ctx.fillRect(width/2 - 260, height/2 + 177, 125, 33);
+            ctx.fillStyle = 'white';
+            ctx.fillText('Boomerang', width / 2 - 247, height / 2 + 203);
+            ctx.fillText('Sickle', width / 2 - 185, height / 2 + 255);
+            
+            ctx.fillText('Axe', width / 2 + 115, height / 2 + 150);
+            ctx.fillText('Wand', width / 2 + 120, height / 2 + 203);
+            ctx.fillText('Gun', width / 2 + 115, height / 2 + 255);
+        }
+        else if(day == 1 && gameStarted && atPark && pickUpStick && !forest && !playground && !picnic && !feild && !court && !nightmare){
+            ctx.font = 'bold 16px Start';
+            ctx.fillStyle = 'white';
+            ctx.fillText('You arrive at the park. You can', width / 2 - 265, height / 2 - 250);
+            ctx.fillText('play in a few different areas: ', width / 2 - 265, height / 2 - 225);
+            ctx.fillText('the Forest, Playground, Feild or ', width / 2 - 265, height / 2 - 200);
+            ctx.fillText('Court, or you may enjoy a Picnic.', width / 2 - 265, height / 2 - 175);
+            //Area Choices
+            ctx.fillText('Forest', width / 2 - 185, height / 2 + 150);
+            ctx.fillText('Playgrd', width / 2 - 210, height / 2 + 203);
+            ctx.fillText('Picnic', width / 2 - 185, height / 2 + 255);
+            
+            ctx.fillText('Feild', width / 2 + 100, height / 2 + 150);
+            ctx.fillText('Court', width / 2 + 114, height / 2 + 203);
+            ctx.fillText('Home', width / 2 + 108, height / 2 + 255);
+            
+            //CANDY Show
+            ctx.font = 'bold 15px Start';
+            ctx.fillStyle = 'HotPink';
+            ctx.fillText("Candy:" + CDY, width/2 +140, height/2 - 130);
+            
+            ctx.font = 'bold 16px Start';
+        }
+        else if((day == 10 || day == 20 || day == 30 || day == 40) && gameStarted && atPark && pickUpStick && !forest && !playground && !picnic && !feild && !court && !nightmare){
+            ctx.font = 'bold 16px Start';
+            ctx.fillStyle = 'red';
+            ctx.fillText('You arrive at the park to find it', width / 2 - 265, height / 2 - 250);
+            ctx.fillText('completely empty. In the center', width / 2 - 265, height / 2 - 225);
+            ctx.fillText('you see the Nightmare Dweller. He', width / 2 - 265, height / 2 - 200);
+            ctx.fillText('evaporates, leaving a portal.', width / 2 - 265, height / 2 - 175);
+            //Area Choices
+            ctx.font = 'bold 16px Start';
+            ctx.fillStyle = 'white';
+            ctx.fillText('Enter', width / 2 - 40, height / 2 + 185);
+            ctx.fillText('the Hole', width / 2 - 65, height / 2 + 210);
+        }
+        else if((day == 50) && gameStarted && atPark && pickUpStick && !forest && !playground && !picnic && !feild && !court && !nightmare){
+            ctx.font = 'bold 16px Start';
+            ctx.fillStyle = 'red';
+            ctx.fillText('Upon entering the park you find', width / 2 - 265, height / 2 - 250);
+            ctx.fillText('it desolate. The wind picks up', width / 2 - 265, height / 2 - 225);
+            ctx.fillText('violently blowing up dirt. The', width / 2 - 265, height / 2 - 200);
+            ctx.fillText('debris soon surround you...', width / 2 - 265, height / 2 - 175);
+            //Area Choices
+            ctx.font = 'bold 16px Start';
+            ctx.fillStyle = 'white';
+            ctx.fillText('Enter', width / 2 - 40, height / 2 + 185);
+            ctx.fillText('the Sand', width / 2 - 65, height / 2 + 210);
+        }
+        else if((day == 60) && gameStarted && atPark && pickUpStick && !forest && !playground && !picnic && !feild && !court && !nightmare){
+            ctx.font = 'bold 16px Start';
+            ctx.fillStyle = 'red';
+            ctx.fillText('Drifting to the park, the air', width / 2 - 265, height / 2 - 250);
+            ctx.fillText('darkens, dimming with each step.', width / 2 - 265, height / 2 - 225);
+            ctx.fillText('Until you are walking upon black', width / 2 - 265, height / 2 - 200);
+            ctx.fillText('emptiness. Nowhere else but...', width / 2 - 265, height / 2 - 175);
+            //Area Choices
+            ctx.font = 'bold 16px Start';
+            ctx.fillStyle = 'black';
+            ctx.fillText('The Dark', width / 2 - 65, height / 2 + 200);
+        }
+        else if (day != 1 && pickUpStick && !forest && !playground && !picnic && !feild && !court && !nightmare) {
+            ctx.font = 'bold 16px Start';
+            ctx.fillStyle = 'white';
+            ctx.fillText('You return to the park. You can', width / 2 - 265, height / 2 - 250);
+            ctx.fillText('play in a few different areas: ', width / 2 - 265, height / 2 - 225);
+            ctx.fillText('the Forest, Playground, Feild or ', width / 2 - 265, height / 2 - 200);
+            ctx.fillText('Court, or you may enjoy a Picnic.', width / 2 - 265, height / 2 - 175);
+            //Area Choices
+            ctx.fillText('Forest', width / 2 - 185, height / 2 + 150);
+            ctx.fillText('Playgrd', width / 2 - 210, height / 2 + 203);
+            ctx.fillText('Picnic', width / 2 - 185, height / 2 + 255);
+            
+            ctx.fillText('Feild', width / 2 + 100, height / 2 + 150);
+            ctx.fillText('Court', width / 2 + 114, height / 2 + 203);
+            ctx.fillText('Home', width / 2 + 108, height / 2 + 255);
+            //CANDY Show
+            ctx.fillStyle = 'HotPink';
+            ctx.fillText("Candy:" + CDY, width/2 +140, height/2 - 130);            
+        }
+        else if (forest == true) {
+            forestPK();
+            fighting = true;
+        }
+        else if (playground == true) {
+            playgroundPK();
+            fighting = true;
+        }
+        else if (picnic == true) {
+            picnicPK();
+        }
+        else if (feild == true) {
+            feildPK();
+            fighting = true;
+        }
+        else if (court == true) {
+            courtPK();
+            fighting = true;
+        }
+        else if (nightmare == true){
+            nightmarePK();
+            fighting = true;
+        }
+        if(fighting == true){
+            didLevel = false;
+        }
+    }
+    function forestPK(){
+        if(!monsterPicked){
+            monsterPicker();
+            monsterPicked = true;
+        }
+        
+        ctx.font = 'bold 16px Start';
+        ctx.fillStyle = 'white';
+        ctx.fillText('You enter the forest and soon', width / 2 - 265, height / 2 - 250);
+        ctx.fillText('engage a', width / 2 - 265, height / 2 - 225);
+        ctx.fillStyle = 'red';
+        ctx.fillText(enemy, width / 2 - 120, height / 2 - 225);
+        ctx.fillStyle = 'white';
+        ctx.fillText('', width / 2 - 265, height / 2 - 200);
+        ctx.fillText('What do you do?', width / 2 - 265, height / 2 - 175);
+    }
+    function playgroundPK(){
+        if(!monsterPicked){
+            monsterPicker();
+            monsterPicked = true;
+        }
+        
+        ctx.font = 'bold 16px Start';
+        ctx.fillStyle = 'white';
+        ctx.fillText('You enter the playgrd and soon', width / 2 - 265, height / 2 - 250);
+        ctx.fillText('engage a', width / 2 - 265, height / 2 - 225);
+        ctx.fillStyle = 'red';
+        ctx.fillText(enemy, width / 2 - 120, height / 2 - 225);
+        ctx.fillStyle = 'white';
+        ctx.fillText('', width / 2 - 265, height / 2 - 200);
+        ctx.fillText('What do you do?', width / 2 - 265, height / 2 - 175);
+    }
+    function picnicPK(){
+        if (snack == true){
+        ctx.font = 'bold 16px Start';
+        ctx.fillStyle = 'white';
+        ctx.fillText('You may eat your Snack and fully', width / 2 - 265, height / 2 - 250);
+        ctx.fillText('recover all ailments. You would', width / 2 - 265, height / 2 - 225);
+        ctx.fillText('also retain all your experiences.', width / 2 - 265, height / 2 - 200);
+        ctx.fillText('Or chow down on some Candy!', width / 2 - 265, height / 2 - 175);
+        //Snack button Picnic
+        ctx.fillText(' Snack', width / 2 - 195, height / 2 + 150);
+        //JoHealth = JoFullHealth;
+        
+        //Main Butt-Go to Park
+            ctx.font = 'bold 16px Start';
+            ctx.fillStyle = 'white';
+            ctx.fillText('Go to', width / 2 - 40, height / 2 + 185);
+            ctx.fillText('the Park', width / 2 - 65, height / 2 + 210);
+        }
+        else {
+        ctx.font = 'bold 16px Start';
+        ctx.fillStyle = 'white';
+        ctx.fillText('You have no more snack to eat.', width / 2 - 265, height / 2 - 250);
+        ctx.fillText('In the meantime you can munch on', width / 2 - 265, height / 2 - 225);
+        ctx.fillText('some candy or visit Sally'+"'"+'s Shop.', width / 2 - 265, height / 2 - 200);
+        ctx.fillText('', width / 2 - 265, height / 2 - 175); 
+        
+        //Main Butt-Go to Park
+            ctx.font = 'bold 16px Start';
+            ctx.fillStyle = 'white';
+            ctx.fillText('Go to', width / 2 - 40, height / 2 + 185);
+            ctx.fillText('the Park', width / 2 - 65, height / 2 + 210);
+        //
+        }
+        //Candy button
+        ctx.fillStyle = 'HotPink';
+        ctx.fillText('Candy', width / 2 - 190, height / 2 + 203);
+        ctx.textAlign="end";
+        ctx.fillText(CDY, width / 2 - 223, height / 2 + 203);
+        ctx.textAlign="left";
+        ctx.fillStyle = 'white';
+        //Sally's Shop
+        ctx.fillStyle = "Turquoise";
+        ctx.fillText('Sally'+"'"+"s", width / 2 + 82, height / 2 + 150);
+        ctx.fillStyle = 'white';
+    }
+    function feildPK(){
+        if(!monsterPicked){
+            monsterPicker();
+            monsterPicked = true;
+        }
+        
+        ctx.font = 'bold 16px Start';
+        ctx.fillStyle = 'white';
+        ctx.fillText('You enter the feild and soon', width / 2 - 265, height / 2 - 250);
+        ctx.fillText('engage a', width / 2 - 265, height / 2 - 225);
+        ctx.fillStyle = 'red';
+        ctx.fillText(enemy, width / 2 - 120, height / 2 - 225);
+        ctx.fillStyle = 'white';
+        ctx.fillText('', width / 2 - 265, height / 2 - 200);
+        ctx.fillText('What do you do?', width / 2 - 265, height / 2 - 175);
+    }
+    function courtPK(){
+        if(!monsterPicked){
+            monsterPicker();
+            monsterPicked = true;
+        }
+        
+        ctx.font = 'bold 16px Start';
+        ctx.fillStyle = 'white';
+        ctx.fillText('You enter the court and soon', width / 2 - 265, height / 2 - 250);
+        ctx.fillText('engage a', width / 2 - 265, height / 2 - 225);
+        ctx.fillStyle = 'red';
+        ctx.fillText(enemy, width / 2 - 120, height / 2 - 225);
+        ctx.fillStyle = 'white';
+        ctx.fillText('', width / 2 - 265, height / 2 - 200);
+        ctx.fillText('What do you do?', width / 2 - 265, height / 2 - 175);
+    }
+    
+    function nightmarePK(){
+        if(!monsterPicked){
+            monsterPicker();
+            monsterPicked = true;
+        }
+        if(day == 10){
+        ctx.font = 'bold 16px Start';
+        ctx.fillStyle = 'red';
+        ctx.fillText('You enter the Hole and are lost', width / 2 - 265, height / 2 - 250);
+        ctx.fillText('in the dark. Slowly two eerie', width / 2 - 265, height / 2 - 225);
+        ctx.fillText('glowing eyes stare back at you.', width / 2 - 265, height / 2 - 200);
+        ctx.fillText('It'+"'"+'s the Boogie Man!', width / 2 - 265, height / 2 - 175);
+    }
+    else if(day == 20){
+        ctx.font = 'bold 16px Start';
+        ctx.fillStyle = 'red';
+        ctx.fillText('You enter the Hole and hear a', width / 2 - 265, height / 2 - 250);
+        ctx.fillText('powerful cackle! Suddenly with a', width / 2 - 265, height / 2 - 225);
+        ctx.fillText('POOF! and DAZZLE of magic the', width / 2 - 265, height / 2 - 200);
+        ctx.fillText('Mother Witch is before you!', width / 2 - 265, height / 2 - 175);
+    }
+    else if(day == 30){
+        ctx.font = 'bold 16px Start';
+        ctx.fillStyle = 'red';
+        ctx.fillText('You enter the Hole and listen to', width / 2 - 265, height / 2 - 250);
+        ctx.fillText('a growing "tic" "toc" "tic" "Toc"', width / 2 - 265, height / 2 - 225);
+        ctx.fillText('"Tic" "TOC" "TIC!" "TOC!" behold ', width / 2 - 265, height / 2 - 200);
+        ctx.fillText('the Father Clock!', width / 2 - 265, height / 2 - 175);
+    }
+    else if(day == 40){
+        ctx.font = 'bold 16px Start';
+        ctx.fillStyle = 'red';
+        ctx.fillText('You enter the Hole and see a', width / 2 - 265, height / 2 - 250);
+        ctx.fillText('mirror? You think it odd until', width / 2 - 265, height / 2 - 225);
+        ctx.fillText('he winks! You are faced with', width / 2 - 265, height / 2 - 200);
+        ctx.fillText('Yourself?', width / 2 - 265, height / 2 - 175);
+    }
+    else if(day == 50){
+        ctx.font = 'bold 16px Start';
+        ctx.fillStyle = 'red';
+        ctx.fillText('Amidst the swirling sand you see', width / 2 - 265, height / 2 - 250);
+        ctx.fillText('blurry visions, odd people and', width / 2 - 265, height / 2 - 225);
+        ctx.fillText('odd places. A face materializes.', width / 2 - 265, height / 2 - 200);
+        ctx.fillText('The Sandman is asleep.', width / 2 - 265, height / 2 - 175);
+    }
+    else if(day == 60){
+        ctx.font = 'bold 16px Start';
+        ctx.fillStyle = 'red';
+        ctx.fillText('FEAR!!! ANGUISH!!! PAIN!!! There', width / 2 - 265, height / 2 - 250);
+        ctx.fillText('is nothing more words can tell!', width / 2 - 265, height / 2 - 225);
+        ctx.fillText('Wake up Jonny! He is here for', width / 2 - 265, height / 2 - 200);
+        ctx.fillText('you! Sleep Nightmare Dweller!', width / 2 - 265, height / 2 - 175);
+    }
+    }
+    function sallysShop(){
+        ctx.font = 'bold 16px Start';
+        ctx.fillStyle = 'Turquoise';
+        ctx.fillText('Welcome to Sally'+"'"+'s Shop. Sally', width / 2 - 265, height / 2 - 250);
+        ctx.fillText('has a sweet tooth she'+"'"+'ll sell ya,', width / 2 - 265, height / 2 - 225);
+        ctx.fillText('and great prices for those that', width / 2 - 265, height / 2 - 200);
+        ctx.fillText('need an edge. "'+sallyHi+'" she greets.', width / 2 - 265, height / 2 - 175);
+        //Sally's Wares
+        ctx.fillStyle = 'yellow';
+        ctx.textAlign="left";
+        ctx.fillText('I.M.', width / 2 - 165, height / 2 + 150);
+        ctx.fillStyle = 'Turquoise';
+        ctx.fillText('HP', width / 2 - 167, height / 2 + 203);
+        ctx.fillText('DF', width / 2 - 152, height / 2 + 255);
+        ctx.fillText('Snack', width / 2 + 100, height / 2 + 150);
+        ctx.fillText('AK', width / 2 + 137, height / 2 + 203);
+        ctx.fillText('DG', width / 2 + 122, height / 2 + 255);
+        ctx.fillStyle = 'hotpink';
+        if (snack == true){
+        ctx.fillText("--", width / 2 + 215, height / 2 + 150);}//Snack
+        else {ctx.fillText("15", width / 2 + 215, height / 2 + 150);}
+        ctx.fillText("5", width / 2 + 226, height / 2 + 203);//AK
+        ctx.fillText("5", width / 2 + 215, height / 2 + 255);//DG
+        ctx.textAlign="end";
+        ctx.fillText("25", width / 2 - 211, height / 2 + 150);//IM
+        ctx.fillText("5", width / 2 - 223, height / 2 + 203);//HP
+        ctx.fillText("5", width / 2 - 211, height / 2 + 255);//DF
+        ctx.textAlign="left";
+        
+        
+        //Return to Park
+        ctx.font = 'bold 16px Start';
+        ctx.fillStyle = 'white';
+        ctx.fillText('Go to', width / 2 - 40, height / 2 + 185);
+        ctx.fillText('the Park', width / 2 - 65, height / 2 + 210);
+        //Candy Show
+        ctx.font = 'bold 15px Start';
+        ctx.fillStyle = 'HotPink';
+        ctx.fillText("Candy:" + CDY, width/2 +140, height/2 - 130);
+    }
+    
+    ///MONSTER GENERATOR///
+    function possibleAnswers(ans) {
+	var select = Math.floor(Math.random() * ans.length);
+	var rand = ans[select];
+		return rand;
+	
+    }
+    function monsterPicker(){
+        if (forest){ //Health
+            monsters = ["brooding bat","rabid rat"];
+        }
+        else if (playground){ //Dodge
+            monsters = ["manic monkey","slippery slime"];
+        }
+        else if (feild){ //Defence
+            monsters = ["gnarling gnome","possessed pidgeon","mad mole"];
+        }
+        else if (court){ //Attack
+            monsters = ["floating skull","charade of floating pots"];
+        }
+        else{monsters = "Nightmare";}
+        
+        var pickedMonster = possibleAnswers(monsters);
+        enemy = pickedMonster;
+        
+        monsterStats();
+
+    }
+    function monsterStats(){
+        enHealth = enFullHealth;
+        enAttack = enBasAttack;
+        enDefense = enBasDefense;
+        enDodge = enBasDodge; 
+        
+        if(day == 10){ //Boogie Man
+            enHealth = enHealth*2 + variation(0,Level) + Math.round(enHealth/2); 
+                enAttack = enAttack;
+                    enDefense = enDefense*2 + variation(0,Level);
+                        enDodge = enDodge - Math.round(enDodge/2);
+        }
+        else if(day == 20){ //Mother Witch
+            enHealth = enHealth*4 + variation(0,Level); 
+                enAttack = enAttack*3 + variation(0,Level);
+                    enDefense = enDefense - Math.round(enDefense/2);
+                        enDodge = enDodge + variation(0,Level);
+        }
+        else if(day == 30){ //Father Clock
+            enHealth = enHealth*7 + variation(0,Level); 
+                enAttack = enAttack + variation(0,Level);
+                    enDefense = enDefense*6 + variation(0,Level);
+                        enDodge = enDodge*6 + variation(0,Level);//Over 100 impossible to defeat...
+        }
+        else if(day == 40){//Yourself?
+            enHealth = JoHealth*2; 
+                enAttack = JoAttack;
+                    enDefense = JoDefense;
+                        enDodge = JoDodge;
+        }
+        else if(day == 50){//Sandman
+            enHealth = 1000;
+                enAttack = 10;
+                    enDefense = 1000;
+                        enDodge = 1000;
+            
+        }
+        else if(day == 60){//Nightmare Dweller
+            enHealth = 10000;//Needs a 1/4 chance to recover health equal to damage
+                enAttack = 0;
+                    enDefense = 0;
+                        enDodge = 0;
+            
+        }
+//        if(Level < 5){
+        else if(forest){
+           enHealth = enHealth + variation(0,Level) + Math.round(enHealth/2); 
+            enAttack = enAttack + variation(0,Level);
+            enDefense = enDefense + variation(0,Level);
+            enDodge = enDodge + variation(0,Level); 
+        }
+        else if(playground){
+            enHealth = enHealth + variation(0,Level); 
+            enAttack = enAttack + variation(0,Level);
+            enDefense = enDefense + variation(0,Level);
+           enDodge = enDodge + variation(0,Level) + Math.round(enDodge/2); 
+        }
+        else if(feild){
+            enHealth = enHealth + variation(0,Level); 
+            enAttack = enAttack + variation(0,Level);
+           enDefense = enDefense + variation(0,Level) + Math.round(enDefense/2);
+            enDodge = enDodge + variation(0,Level); 
+        }
+        else if(court){
+            enHealth = enHealth + variation(0,Level); 
+            enAttack = enAttack + variation(0,Level) + Math.round(enAttack/2);
+            enDefense = enDefense + variation(0,Level);
+            enDodge = enDodge + variation(0,Level); 
+        }
+        else {
+        enHealth = enHealth + variation(0,Level); 
+        enAttack = enAttack + variation(0,Level);
+        enDefense = enDefense + variation(0,Level);
+        enDodge = enDodge + variation(0,Level);
+        }
+
+    }
+    function variation(min, max){
+        var enVariation = Math.random() * (max - min) + min;
+        return Math.round(enVariation);
+    }
+    
+    //THE FIGHT MATHEMATICA//
+    function fight(){ 
+        parry = [0,1,2];
+        dodge();
+        if (Level <= 10 ) {fightClicks += Level;}
+        else {fightClicks += Level*2;}
+        resettxt();
+        
+        if (nightmare && fear5){
+            DeepSleep = variation(0,6);
+            NightFuel = variation(0,6);////////////////////////////////////////////////
+            DreamReam = variation(2,3);
+            if (DeepSleep < 2) {
+                enHealth += JoAttack;
+                enAttack += NightFuel;
+                enDefense += NightFuel;
+                enDodge += NightFuel;
+            }
+            else if (DeepSleep > 4) {
+                JoHealth += DreamReam;
+                JoAttack += DreamReam;
+                JoDefense += DreamReam;
+                JoDodge += DreamReam;
+            }
+            else{}     
+        }
+        //If Jo did not dodge and the enemy is not dead
+        if (dodged == false && !enHealth <= 0){ //Jo gets hit
+                //But if Jo has high Def he is only dented
+            var ting = possibleAnswers(parry);
+            //Defense equations 3/4 2/3 1/2 1/3 1/4th
+            if (enAttack*4 <= JoDefense){
+                Jotxt = "Jonny dents:";
+                JoDamage = Math.round(enAttack * 0.25) +ting;
+                JoHealth -= Math.round(enAttack * 0.25) +ting;
+            }
+            else if (enAttack*3 <= JoDefense){
+                Jotxt = "Jonny dents:";
+                JoDamage = Math.round(enAttack * 0.333) +ting;
+                JoHealth -= Math.round(enAttack * 0.333) +ting;
+            }
+            else if (enAttack*2 <= JoDefense){
+                Jotxt = "Jonny dents:";
+                JoDamage = Math.round(enAttack * 0.5) +ting;
+                JoHealth -= Math.round(enAttack * 0.5) +ting;
+            }
+            else if (enAttack*1.5 <= JoDefense){
+                Jotxt = "Jonny loses:";
+                JoDamage = Math.round(enAttack * 0.666) +ting;
+                JoHealth -= Math.round(enAttack * 0.666) +ting;
+            }
+            else if (enAttack <= JoDefense){
+                Jotxt = "Jonny loses:";
+                JoDamage = Math.round(enAttack * 0.75) +ting;
+                JoHealth -= Math.round(enAttack * 0.75) +ting;
+            }
+            else if (enAttack > JoDefense){
+                Jotxt = "Jonny loses:";
+                JoDamage = Math.round(enAttack * 0.999) +ting;
+                JoHealth -= Math.round(enAttack * 0.999) +ting;
+            }
+            else { //He is hit normally
+                Jotxt = "Jonny loses:";
+                JoDamage = enAttack+ting - JoDefense;
+                JoHealth -= enAttack+ting - JoDefense;
+            }
+
+        } //If Jo does dodge and the enemy isn't dead he goes unscathed
+        else if (dodged == true && !enHealth <= 0) {
+            Jotxt = "Jonny Dodged!";
+            JoDamage = "";
+            fightClicks += Level;
+        }
+        //If Jo doesn't dodge text (unless Nightmare it's impossible)
+        if (runFail) {
+            if(nightmare){
+            Entxt = "No Escape!!!";
+            enDamage = "";
+            }
+            else{
+            Entxt = "Enemy Pursues";
+            enDamage = "";
+        }
+        }
+        //Enemy Gets hit equations
+        else if (enDodged == false && !JoHealth <= 0) {
+                //But if
+            var ting = possibleAnswers(parry);
+            //Defense equations
+            if (JoAttack*4 <= enDefense){
+                Entxt = "Enemy dents:";
+                enDamage = Math.round(JoAttack * 0.25) +ting;
+                enHealth -= Math.round(JoAttack * 0.25) +ting;
+            }
+            else if (JoAttack*3 <= enDefense){
+                Entxt = "Enemy dents:";
+                enDamage = Math.round(JoAttack * 0.333) +ting;
+                enHealth -= Math.round(JoAttack * 0.333) +ting;
+            }
+            else if (JoAttack*2 <= enDefense){
+                Entxt = "Enemy dents:";
+                enDamage = Math.round(JoAttack * 0.5) +ting;
+                enHealth -= Math.round(JoAttack * 0.5) +ting;
+            }
+            else if (JoAttack*1.5 <= enDefense){
+                Entxt = "Enemy dents:";
+                enDamage = Math.round(JoAttack * 0.666) +ting;
+                enHealth -= Math.round(JoAttack * 0.666) +ting;
+            }
+            else if (JoAttack <= enDefense){
+                Entxt = "Enemy dents:";
+                enDamage = Math.round(JoAttack * 0.75) +ting;
+                enHealth -= Math.round(JoAttack * 0.75) +ting;
+            }
+            else if (JoAttack > enDefense){
+                Entxt = "Enemy loses:";
+                enDamage = Math.round(JoAttack * 0.999) +ting;
+                enHealth -= Math.round(JoAttack * 0.999) +ting;
+            }
+            else {
+                Entxt = "Enemy loses:";
+                enDamage = JoAttack+ting - enDefense;
+                enHealth -= JoAttack+ting - enDefense;
+            }
+        }
+        else if (enDodged == true && !JoHealth <= 0) {
+            Entxt = "Enemy Dodged!";
+            enDamage = "";
+        }
+
+        //WIN fight
+        if (enHealth <= 0){
+            monsterPicked = false;
+            forest = false;
+            playground = false;
+            picnic = false;
+            feild = false;
+            court = false;
+           
+           if(nightmare && fear5){//Nightmare Dweller
+                GameEnd = true;//Defeated End of Game!
+                resettxt();
+                atPark = false;
+                exp += 56256;
+                IM += 9;
+                nightmare = false;
+            }
+            else if(nightmare && fear4){//Sandman
+                fear5 = true;
+                day += 1;
+                atPark = false;
+                exp += 28800;
+                IM += 11;
+                nightmare = false;
+            }
+            else if(nightmare && fear3){//Yourself?
+                fear4 = true;
+                day += 1;
+                atPark = false;
+                exp += 11520;
+                IM += 8;
+                nightmare = false;
+            }
+            else if(nightmare && fear2){//Father Clock
+                fear3 = true;
+                day += 1;
+                atPark = false;
+                exp += 3840;
+                IM += 4;
+                nightmare = false;
+            }
+            else if(nightmare && fear1){//Mother Witch
+                fear2 = true;
+                day += 1;
+                atPark = false;
+                exp += 1280;
+                IM += 2;
+                nightmare = false;
+            }
+            else if(nightmare){//Boogie Man
+                fear1 = true;
+                day += 1;
+                atPark = false;
+                exp += 640;
+                IM += 1;
+                nightmare = false;
+            }
+            fighting = false;
+            exp += fightClicks;
+            expDay += fightClicks;
+            fightClicks = 0;
+            enDamage = 0;
+            runFail = false;
+            checkExp();
+            candyDrop();
+            if(!didLevel && JoHealth <= 0){
+            exp += Level; //This bonus exp leads to a possible non-level eg. "EX:22/20 Enemy Defeated"
+            checkExp(); //Check again... try to work around
+                if(didLevel){
+                    Jotxt = "";
+                    Entxt = "";
+                }
+                else {
+                    Jotxt = "Barely Survive";
+                    Entxt = "Enemy Defeated";
+                    JoHealth = 0;
+                }
+            }
+            else if(!didLevel && dodged == false){
+            Jotxt = "Jonny loses:" + JoDamage;
+            Entxt = "Enemy Defeated";
+            }
+            else if(!didLevel && dodged){
+            Jotxt = "Jonny Dodged!!";
+            Entxt = "Enemy Defeated";                
+            }
+            else{Jotxt = "";
+                 Entxt = "";
+            }
+            JoDamage = 0;
+        }
+        else if (JoHealth <= 0 && nightmare){//GAME OVER
+            GameOver = true;
+            lostFight = true;
+            day += 1;
+            atPark = false;
+            monsterPicked = false;
+            forest = false;
+            playground = false;
+            picnic = false;
+            feild = false;
+            court = false;
+            fighting = false;
+            exp -= expDay;
+            fightClicks = 0;
+            JoDamage = 0;
+            enDamage = 0;
+            runFail = false;
+            resettxt();
+        }
+        //Lost Fight
+        else if (JoHealth <= 0){
+            lostFight = true;
+            day += 1;
+            atPark = false;
+            monsterPicked = false;
+            forest = false;
+            playground = false;
+            picnic = false;
+            feild = false;
+            court = false;
+            fighting = false;
+            exp -= expDay;
+            fightClicks = 0;
+            JoDamage = 0;
+            enDamage = 0;
+            runFail = false;
+            resettxt();
+            Entxt = "Jonny Fainted";
+        }
+    }
+    function dodge(){
+        var Jofifty = variation(0,3); //Should be 2/3 chance if over 150?
+        var enfifty = variation(0,3); //Should enemy have 0-2(1/3) chance disadvantage?
+        areYouFast = variation(1,100);
+        areTheyFast = variation(1,100);
+        //Jonny Dodge
+    if (JoDodge >= 200) {
+        if (Jofifty <= 2) {
+            if (areYouFast <= JoDodge){
+                dodged = true;
+            }
+            else {
+                dodged = false;
+            }
+        }
+        else { dodged = false; }
+    }
+    else {
+        if (Jofifty <= 1) {
+            if (areYouFast <= JoDodge){
+                dodged = true;
+            }
+            else {
+                dodged = false;
+            }
+        }
+        else { dodged = false; }
+    }
+        
+        //Enemy Dodge
+    if (enDodge >= 1001) {
+        if (enfifty <= 2) {
+            if (areTheyFast <= enDodge){
+                enDodged = true;
+            }
+            else {
+                enDodged = false;
+            }
+        }
+        else { enDodged = false; }
+    }
+    else {
+        if (enfifty <= 1) {
+            if (areTheyFast <= enDodge){
+                enDodged = true;
+            }
+            else {
+                enDodged = false;
+            }
+        }
+        else { enDodged = false; }
+    }
+}
+    
+    function runAway() {
+            var away = [0,1,2,3];
+            var escape = possibleAnswers(away);
+            if (escape == 1 && !nightmare) {
+                monsterPicked = false;
+                forest = false;
+                playground = false;
+                picnic = false;
+                feild = false;
+                court = false;
+                fighting = false;
+                //exp += fightClicks;
+                //expDay += fightClicks;
+                fightClicks = 0;
+                JoDamage = 0;
+                enDamage = 0;
+                Jotxt = "You run away...";
+                Entxt = "";
+                runFail = false;
+            }
+            else {
+                runFail = true;
+                fight();   
+            }
+        }
+        
+    function snackEat() {
+        snack = false;
+        expDay = 0;
+        JoHealth = JoFullHealth;
+        //picnic = false;
+    }
+    
+    function candyEat() {
+        if(CDY > 0){
+            CDY -= 1;            
+            var heal = variation(5,10);
+            JoHealth += heal;
+            if (JoHealth > JoFullHealth){
+                JoHealth = JoFullHealth;
+            }
+            JotxtColor = "HotPink";
+            Jotxt = "Jonny heals: ";
+            JoDamage = heal;
+            Entxt = ""; enDamage = ""; 
+        }
+        else {
+            JotxtColor = "HotPink";
+            Jotxt = "You ate it all";
+            JoDamage = "";
+            Entxt = ""; enDamage = "";
+        }
+    }
+    function candyDrop() {
+        var dropped = variation(1,4);
+        if (dropped == 1){
+            CDY += 1;
+            candytxt = "Found a Candy!"; 
+        }
+        else {}
+    }
+    function IMsell() {
+        if (CDY >= 25) {
+            CDY -= 25;
+            IM += 1;
+            Jotxt = possibleAnswers(sallySaid);
+        }
+        else {
+            Jotxt = possibleAnswers(sallySays); 
+        }
+    }
+    function SnackSell() {
+        if (CDY >= 15 && !snack) {
+            CDY -= 15;
+            snack = true;
+            Jotxt = possibleAnswers(sallySaid);
+            //Jotxt = '"Pleasha JoJo"';
+            //Jotxt = '"Mmm Mmm JoJo"';
+            //Jotxt = '"Kindly Johny"';
+            //Jotxt = '"Welcome JoJo"';
+            //Jotxt = '"Pleasha Joey"';
+        }
+        else if (snack){
+            Jotxt = '"Ya ava Snack"'; 
+            //Jotxt = '""';
+        }
+        else {
+            Jotxt = possibleAnswers(sallySays); 
+            //Jotxt = '"Morthan That"';
+            //Jotxt = '"Mayba Lata J"';
+            //Jotxt = '"Cana do ya J"';
+            //Jotxt = '"Onla Cane JJ"';
+            //Jotxt = '"Sweeta Shuga"';
+        }
+    }
+    function HPsell() {
+        if (CDY >= 5) {
+            CDY -= 5;
+            JoHealth += 4;
+            JoFullHealth += 4;
+            Jotxt = possibleAnswers(sallySaid);
+        }
+        else {
+            Jotxt = possibleAnswers(sallySays); 
+        }
+    }
+    function AKsell() {
+        if (CDY >= 5) {
+            CDY -= 5;
+            JoAttack += 1;
+            Jotxt = possibleAnswers(sallySaid);
+        }
+        else {
+            Jotxt = possibleAnswers(sallySays); 
+        }
+    }
+    function DFsell() {
+        if (CDY >= 5) {
+            CDY -= 5;
+            JoDefense += 1;
+            Jotxt = possibleAnswers(sallySaid);
+        }
+        else {
+            Jotxt = possibleAnswers(sallySays); 
+        }
+    }
+    function DGsell() {
+        if (CDY >= 5) {
+            CDY -= 5;
+            JoDodge += 1;
+            Jotxt = possibleAnswers(sallySaid);
+        }
+        else {
+            Jotxt = possibleAnswers(sallySays); 
+        }
+    }
+        
+function checkExp(){
+    //Jo level up
+    if(exp >= neededExp) {
+        Level += 1;
+        IM += 1;
+        didLevel = true;
+        JoFullHealth += healthBo;
+        JoHealth += healthBo;
+        JoAttack += attackBo;
+        JoDefense += defenseBo;
+        JoDodge += dodgeBo;
+        if(Level < 8) {
+            neededExp *= 2;
+        }
+        else { 
+            neededExp *= 1.5;
+            neededExp = Math.round(neededExp);
+        }
+        //Enemy followed level up
+        if(Level < 5){
+            enFullHealth += healthEn;
+            enBasAttack += attackEn;
+            enBasDefense += defenseEn;
+            enBasDodge += dodgeEn;
+        }
+        else if(Level < 8){
+            enFullHealth += 4;
+            enBasAttack += 1;
+            enBasDefense += 1;
+            enBasDodge += 1;
+        }
+        else if(fear3){
+            enFullHealth += 16;
+            enBasAttack += 4;
+            enBasDefense += 4;
+            enBasDodge += 4;
+        }
+        else if(fear4){
+            enFullHealth += 24;
+            enBasAttack += 4;
+            enBasDefense += 4;
+            enBasDodge += 4;
+        }
+        else{
+            enFullHealth += 4;
+            enBasAttack += 1;
+            enBasDefense += 1;
+            enBasDodge += 1;
+        }
+    }
+        else {}
+}
+    
+    //Stick upgrade
+    function stickUp(){
+        //Sword Up
+        if(stick == "Sword"){
+            stick = "Shortsword";
+            attackBo += 2; JoAttack += 2;
+            dodgeBo += 2; JoDodge += 2;
+            IMneededSTK = 7;
+            IM -= 3;
+        }
+        else if(stick == "Shortsword"){
+            stick = "Scimitar";
+            attackBo += 4; JoAttack += 4;
+            dodgeBo += 4; JoDodge += 4;
+            IMneededSTK = 11;
+            IM -= 7;
+        }
+        else if(stick == "Scimitar"){
+            stick = "Excalibur";
+            attackBo += 8; JoAttack += 8;
+            dodgeBo += 8; JoDodge += 8;
+            IMneededSTK = 0;
+            IM -= 11;
+        }
+        //Boomerang
+        else if(stick == "Boomerang"){
+            stick = "Tri-Boomer";
+            attackBo += 2; JoAttack += 2;
+            defenseBo += 2; JoDefense += 2;
+            IMneededSTK = 7;
+            IM -= 3;
+        }
+        else if(stick == "Tri-Boomer"){
+            stick = "Chakra";
+            attackBo += 4; JoAttack += 4;
+            defenseBo += 4; JoDefense += 4;
+            IMneededSTK = 11;
+            IM -= 7;
+        }
+        else if(stick == "Chakra"){
+            stick = "Mambele de Sun";
+            attackBo += 8; JoAttack += 8;
+            defenseBo += 8; JoDefense += 8;
+            IMneededSTK = 0;
+            IM -= 11;
+        }
+        //Sickle Up
+        else if(stick == "Sickle"){
+            stick = "Chain-Sickle";
+            attackBo += 2; JoAttack += 2;
+            healthBo += 4; JoHealth += 4; JoFullHealth += 4;
+            IMneededSTK = 7;
+            IM -= 3;
+        }
+        else if(stick == "Chain-Sickle"){
+            stick = "Scythe";
+            attackBo += 4; JoAttack += 4;
+            healthBo += 8; JoHealth += 8; JoFullHealth += 8;
+            IMneededSTK = 11;
+            IM -= 7;
+        }
+        else if(stick == "Scythe"){
+            stick = "Deaths Reaper";
+            attackBo += 8; JoAttack += 8;
+            healthBo += 16; JoHealth += 16; JoFullHealth += 16;
+            IMneededSTK = 0;
+            IM -= 11;
+        }
+        // Axe UP
+        else if(stick == "Axe"){
+            stick = "Tomahawk";
+            defenseBo += 2; JoDefense += 2;
+            healthBo += 4; JoHealth += 4; JoFullHealth += 4;
+            IMneededSTK = 7;
+            IM -= 3;
+        }
+        else if(stick == "Tomahawk"){
+            stick = "Labrys Axe";
+            defenseBo += 4; JoDefense += 4;
+            healthBo += 8; JoHealth += 8; JoFullHealth += 8;
+            IMneededSTK = 11;
+            IM -= 7;
+        }
+        else if(stick == "Labrys Axe"){
+            stick = "Dwarf Kings Axe";
+            defenseBo += 8; JoDefense += 8;
+            healthBo += 16; JoHealth += 16; JoFullHealth += 16;
+            IMneededSTK = 0;
+            IM -= 11;
+        }
+        //Wand Up
+        else if(stick == "Wand"){
+            stick = "Orb of Fire";
+            dodgeBo += 2; JoDodge += 2;
+            healthBo += 4; JoHealth += 4; JoFullHealth += 4;
+            IMneededSTK = 7;
+            IM -= 3;
+        }
+        else if(stick == "Orb of Fire"){
+            stick = "Rod of Frost";
+            dodgeBo += 4; JoDodge += 4;
+            healthBo += 8; JoHealth += 8; JoFullHealth += 8;
+            IMneededSTK = 11;
+            IM -= 7;
+        }
+        else if(stick == "Rod of Frost"){
+            stick = "Merlins Staff";
+            dodgeBo += 8; JoDodge += 8;
+            healthBo += 16; JoHealth += 16; JoFullHealth += 16;
+            IMneededSTK = 0;
+            IM -= 11;
+        }
+        // Gun UP
+        else if(stick == "Gun"){
+            stick = "Rifle";
+            defenseBo = 2; JoDefense += 2;
+            dodgeBo = 2; JoDodge += 2;
+            IMneededSTK = 7;
+            IM -= 3;
+        }
+        else if(stick == "Rifle"){
+            stick = "Machine Gun";
+            defenseBo = 4; JoDefense += 4;
+            dodgeBo = 4; JoDodge += 4;
+            IMneededSTK = 11;
+            IM -= 7;
+        }
+        else if(stick == "Machine Gun"){
+            stick = "Joes Bazooka";
+            defenseBo = 8; JoDefense += 8;
+            dodgeBo = 8; JoDodge += 8;
+            IMneededSTK = 0;
+            IM -= 11;
+        }
+    }
+    
+    function AniUp(){
+        //Dog Up
+        if(ANI == "Dog"){
+            ANI = "Wolf";
+            defenseBo += 2; JoDefense += 2; 
+            dodgeBo += 2; JoDodge += 2;
+            IMneededANI = 6;
+            IM -= 3;
+        }
+        else if(ANI == "Wolf"){
+            ANI = "TimberWolf";
+            defenseBo += 4; JoDefense += 4; 
+            dodgeBo += 4; JoDodge += 4;
+            IMneededANI = 9;
+            IM -= 6;
+        }
+        else if(ANI == "TimberWolf"){
+            ANI = "WereWolf";
+            defenseBo += 6; JoDefense += 6; 
+            dodgeBo += 6; JoDodge += 6;
+            IMneededANI = 0;
+            IM -= 9;
+        }
+        //Bird Up
+        else if(ANI == "Bird"){
+            ANI = "Hawk";
+            healthBo += 4; JoHealth += 4; JoFullHealth += 4;
+            attackBo += 2; JoAttack += 2;
+            IMneededANI = 6;
+            IM -= 3;
+        }
+        else if(ANI == "Hawk"){
+            ANI = "Eagle";
+            healthBo += 8; JoHealth += 8; JoFullHealth += 8;
+            attackBo += 4; JoAttack += 4;
+            IMneededANI = 9;
+            IM -= 6;
+        }
+        else if(ANI == "Eagle"){
+            ANI = "Thunderbird";
+            //ANI = "Thnderbird";
+            healthBo += 12; JoHealth += 12; JoFullHealth += 12;
+            attackBo += 6; JoAttack += 6;
+            IMneededANI = 0;
+            IM -= 9;
+        }
+        // Pony UP
+        else if(ANI == "Pony"){
+            ANI = "Horse";
+            healthBo += 4; JoHealth += 4; JoFullHealth += 4;
+            dodgeBo += 2; JoDodge += 2;
+            IMneededANI = 6;
+            IM -= 3;
+        }
+        else if(ANI == "Horse"){
+            ANI = "Stallion";
+            healthBo += 8; JoHealth += 8; JoFullHealth += 8;
+            dodgeBo += 4; JoDodge += 4;
+            IMneededANI = 9;
+            IM -= 6;
+        }
+        else if(ANI == "Stallion"){
+            ANI = "Unicorn";
+            healthBo += 12; JoHealth += 12; JoFullHealth += 12;
+            dodgeBo += 6; JoDodge += 6;
+            IMneededANI = 0;
+            IM -= 9;
+        }
+        // Bear UP
+        else if(ANI == "Bear"){
+            ANI = "PolarBear";
+            defenseBo += 2; JoDefense += 2;
+            attackBo += 2; JoAttack += 2;
+            IMneededANI = 6;
+            IM -= 3;
+        }
+        else if(ANI == "PolarBear"){
+            ANI = "GrizzlyBear";
+            defenseBo += 4; JoDefense += 4;
+            attackBo += 4; JoAttack += 4;
+            IMneededANI = 9;
+            IM -= 6;
+        }
+        else if(ANI == "GrizzlyBear"){
+            ANI = "OldEphraim";
+            defenseBo += 6; JoDefense += 6;
+            attackBo += 6; JoAttack += 6;
+            IMneededANI = 0;
+            IM -= 9;
+        }
+        // Cowbell up 
+        else if(ANI == "Cow"){
+            ANI = "Steer";
+            healthBo += 4; JoHealth += 4; JoFullHealth += 4;
+            defenseBo += 2; JoDefense += 2;
+            IMneededANI = 6;
+            IM -= 3;
+        }
+        else if(ANI == "Steer"){
+            ANI = "Bull";
+            healthBo += 8; JoHealth += 8; JoFullHealth += 8;
+            defenseBo += 4; JoDefense += 4;
+            IMneededANI = 9;
+            IM -= 6;
+        }
+        else if(ANI == "Bull"){
+            ANI = "Minataur";
+            healthBo += 12; JoHealth += 12; JoFullHealth += 12;
+            defenseBo += 6; JoDefense += 6;
+            IMneededANI = 0;
+            IM -= 9;
+        }
+        //Deer to my heart
+        else if(ANI == "Deer"){
+            ANI = "Elk";
+            attackBo += 2; JoAttack += 2;
+            dodgeBo += 2; JoDodge += 2;
+            IMneededANI = 6;
+            IM -= 3;
+        }
+        else if(ANI == "Elk"){
+            ANI = "Moose";
+            attackBo += 4; JoAttack += 4;
+            dodgeBo += 4; JoDodge += 4;
+            IMneededANI = 9;
+            IM -= 6;
+        }
+        else if(ANI == "Moose"){
+            ANI = "WhiteStag";
+            attackBo += 6; JoAttack += 6;
+            dodgeBo += 6; JoDodge += 6;
+            IMneededANI = 0;
+            IM -= 9;
+        }
+        
+    }
+    
+    function EleUp(){
+        //Flame On!
+        if(ELE == "Fire"){
+            ELE = "Phoenix";
+            attackBo += 4; JoAttack += 4;
+            IMneededELE = 6;
+            IM -= 3;
+        }
+        else if(ELE == "Phoenix"){
+            ELE = "Lightning";
+            attackBo += 8; JoAttack += 8;
+            IMneededELE = 9;
+            IM -= 6;
+        }
+        else if(ELE == "Lightning"){
+            ELE = "Fulgurgen";
+            attackBo += 12; JoAttack += 12;
+            IMneededELE = 0;
+            IM -= 9;
+        }
+        //Earth glossed with Azure Dreams
+        else if(ELE == "Earth"){
+            ELE = "Golem";
+            defenseBo += 4; JoDefense += 4;
+            IMneededELE = 6;
+            IM -= 3;
+        }
+        else if(ELE == "Golem"){
+            ELE = "Metal";
+            defenseBo += 8; JoDefense += 8;
+            IMneededELE = 9;
+            IM -= 6;
+        }
+        else if(ELE == "Metal"){
+            ELE = "Metar";
+            defenseBo += 12; JoDefense += 12;
+            IMneededELE = 0;
+            IM -= 9;
+        }
+        //Water upon the seas
+        else if(ELE == "Water"){
+            ELE = "Nymph";
+            healthBo += 4; JoHealth += 4; JoFullHealth += 4; 
+            IMneededELE = 6;
+            IM -= 3;
+        }
+        else if(ELE == "Nymph"){
+            ELE = "Blood";
+            healthBo += 8; JoHealth += 8; JoFullHealth += 8; 
+            IMneededELE = 9;
+            IM -= 6;
+        }
+        else if(ELE == "Blood"){
+            ELE = "Vampire";
+            healthBo += 12; JoHealth += 12; JoFullHealth += 12; 
+            IMneededELE = 0;
+            IM -= 9;
+        }
+        //Wind in the willows
+        else if(ELE == "Wind"){
+            ELE = "Wraith";
+            dodgeBo += 4; JoDodge += 4; 
+            IMneededELE = 6;
+            IM -= 3;
+        }
+        else if(ELE == "Wraith"){
+            ELE = "Shadow";
+            dodgeBo += 8; JoDodge += 8; 
+            IMneededELE = 9;
+            IM -= 6;
+        }
+        else if(ELE == "Shadow"){
+            ELE = "Figure";
+            dodgeBo += 12; JoDodge += 12; 
+            IMneededELE = 0;
+            IM -= 9;
+        }
+    }
+    //Truth pushers
+    function gameStart(){
+        gameStarted=true;
+    }
+    function goToPark(){
+        resettxt();
+        picnic = false;
+        atPark = true;
+    }
+    //Stats
+    function status(){
+        //Display Day
+            ctx.font = 'bold 15px Start';
+            ctx.fillStyle = 'white';
+            ctx.fillText('day: ', width/2 -45, height/2 - 130);
+            ctx.fillText(day, width/2 + 30, height/2 - 130);
+        //Display Stats Start
+            ctx.beginPath();
+            ctx.font = 'bold 15px Start';
+            ctx.fillStyle = 'white';
+        //STATS display for Jonny
+            ctx.fillText("Lvl-" + Level, width/2 -275, height/2 - 130);
+            if (JoFullHealth*0.25 > JoHealth && Math.floor(Date.now() / frequency) % 2){ //red health when low
+                ctx.fillText("HP:" + JoHealth + "/" + JoFullHealth, width/2 -275, height/2 - 80);
+                ctx.font = 'bold 15px Start';
+                ctx.fillStyle = 'red';
+                ctx.fillText("   " + JoHealth, width/2 -274, height/2 - 80);
+                ctx.font = 'bold 15px Start';
+                ctx.fillStyle = 'white';
+            }
+            else {
+                ctx.fillText("HP:" + JoHealth + "/" + JoFullHealth, width/2 -275, height/2 - 80);
+            }
+            ctx.fillText("AK:" + JoAttack, width/2 -275, height/2 - 55);
+            ctx.fillText("DF:" + JoDefense, width/2 -275, height/2 - 30);
+            ctx.fillText("DG:" + JoDodge, width/2 -275, height/2 - 5);
+            
+            if (ELEment == 'Fire') {
+                ctx.fillStyle = 'orangered';
+            }
+            else if (ELEment == 'Earth') {
+                ctx.fillStyle = 'orange';
+            }
+            else if (ELEment == 'Water') {
+                ctx.fillStyle = 'RoyalBlue';
+            }
+            else if (ELEment == 'Wind') {
+//                ctx.fillStyle = 'white';
+//                ctx.fillRect(width/2 -270, height/2 - 105, 125, -18);
+//                ctx.fillRect(width/2 -270, height/2 + 20, 125, -18);
+//                ctx.fillRect(width/2 -270, height/2 + 45, 125, -18);
+                ctx.fillStyle = 'grey';
+            }
+            ctx.fillText(stick, width/2 -275, height/2 - 105);
+            ctx.fillText(ANI, width/2 -275, height/2 + 20);
+            ctx.fillText(ELE, width/2 -275, height/2 + 45);
+            
+            ctx.fillStyle = 'white';
+            if(exp <= 100){
+                ctx.fillText("EX:"+ exp + "/" + neededExp, width/2 -275, height/2 + 70);
+            }
+            else if (exp > 100000 || neededExp > 100000) {
+                ctx.fillText((exp/1000).toFixed(0) + "/" + (neededExp/1000).toFixed(0), width/2 -275, height/2 + 70);
+            }
+            else if (exp > 10000 || neededExp > 10000) {
+                ctx.fillText((exp/1000).toFixed(1) + "/" + (neededExp/1000).toFixed(1), width/2 -275, height/2 + 70);
+            }
+            else if (exp > 100) {
+                ctx.fillText(exp + "/" + neededExp, width/2 -275, height/2 + 70);
+            }
+            
+            if (snack == true){
+                ctx.fillStyle = 'white';
+                ctx.fillText("Snack", width/2 -275, height/2 + 95);
+            }
+            ctx.stroke();
+        }
+     function enStats(){
+        //enemy STATS display
+        ctx.font = 'bold 15px Start';
+            ctx.fillStyle = 'red';
+            ctx.textAlign="end"; 
+            ctx.fillText(enHealth + ":HP", width/2 +275, height/2 - 80);
+            //ctx.fillText(enHealth +"/"+ enFullHealth + ":HP", width/2 +275, height/2 - 80);
+            ctx.fillText(enAttack + ":AK", width/2 +275, height/2 - 55);
+            ctx.fillText(enDefense + ":DF", width/2 +275, height/2 - 30);
+            ctx.fillText(enDodge + ":DG", width/2 +275, height/2 - 5);
+            ctx.textAlign="left";
+            ctx.stroke();
+        }   
+    function fightText(){
+            ctx.fillStyle = 'white';
+            ctx.fillText(JoDamage, width/2 +80, height/2 + 45);
+            ctx.fillStyle = 'red';
+            ctx.fillText(enDamage, width/2 +80, height/2 + 70);
+    }
+    function resettxt(){
+        JotxtColor = 'white';
+        Jotxt = "";
+        Entxt = "";
+        candytxt = '';
+        JoDamage = "";
+        enDamage = "";
+    }
+    function resetColor(){
+        
+    }
+    function levelText(){
+        if(didLevel && !picnic){
+        JotxtLvl = "";
+        //Entxt = "";
+        JotxtLvl = "Jonny leveled up!";
+        ctx.fillStyle = 'yellow';
+        ctx.fillText(JotxtLvl, width/2 -125, height/2 + 45);
+        ctx.fillText("and gained an IM", width/2 -120, height/2 + 70);
+        }
+    }
+    function fightButt(){
+        ctx.font = 'bold 20px Start';
+        ctx.fillStyle = 'white';
+        if (day == 60){
+            //ctx.fillText('Fight!', width / 2 - 57, height / 2 + 200);
+            ctx.fillText(WakeUp, width / 2 - 57, height / 2 + 200);
+        }
+        else {
+        ctx.fillText('Fight!', width / 2 - 57, height / 2 + 200);
+        }
+        ctx.font = 'bold 16px Start';
+        //Run button
+        ctx.fillText('Run', width / 2 + 115, height / 2 + 255);
+        //Show snack on boss fight
+        if(snack && (day == 10 || day == 20 || day == 30 || day == 40 || day == 50 || day == 60)){
+            ctx.fillText(' Snack', width / 2 - 195, height / 2 + 150);
+        }
+        else {}
+        //Candy button
+        ctx.fillStyle = 'HotPink';
+        ctx.fillText('Candy', width / 2 - 190, height / 2 + 203);
+        ctx.textAlign="end";
+        ctx.fillText(CDY, width / 2 - 223, height / 2 + 203);
+        ctx.textAlign="left";
+        ctx.fillStyle = 'white';
+    }   
+        
+      
+/////////////////BUTTON FUNCTIONS///////////////////   
+    function mainButton(e) {
+        var cursorPos = getCursorPos(e);
+        //Main- Start Button execution and position (square)
+        if (!gameStarted && cursorPos.x > (width / 2) - 70 && cursorPos.x < (width / 2) + 71 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 265) {
+            gameStart(); 
+        }
+        //Main- Go to Park
+        else if (gameStarted && !atPark && !IMmenu && cursorPos.x > (width / 2) - 70 && cursorPos.x < (width / 2) + 71 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 265) {
+            //Home Go to Park Button (Main)
+            goToPark();
+            lostFight = false;
+            resettxt();
+        }
+        else if (gameStarted && !atPark && !IMmenu && !nightmare && cursorPos.x > (width / 2) - 200 && cursorPos.x < (width / 2) - 77 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            //Home Snack button
+            snack = true;
+        }
+        //IM menu display
+        else if (gameStarted && !atPark && !IMmenu && day != 1 && !nightmare && cursorPos.x > (width / 2) + 77 && cursorPos.x < (width / 2) + 200 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            //Home IM menu display button
+            IMmenu = true;
+            resettxt();
+        }
+        else if (gameStarted && !atPark && IMmenu && !ANImenu && !ELEmenu && !nightmare && cursorPos.x > (width / 2) + 77 && cursorPos.x < (width / 2) + 200 && cursorPos.y > (height / 2) + 234 && cursorPos.y < (height / 2) + 267) {
+            //click gun area BACK button
+            IMmenu = false;
+            resettxt();
+        }
+        //Need more IMs to access
+        //Stick Upgrade button
+        else if (gameStarted && !atPark && IMmenu && !ANImenu && !ELEmenu && cursorPos.x > (width / 2) - 200 && cursorPos.x < (width / 2) - 77 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            //click Stick to upgrade Stick and you have enough IM points
+            if(IMneededSTK == 0){
+                Jotxt = "Stick is Ultimate";
+                Entxt ="";
+            }
+            else if(IM >= IMneededSTK){
+                stickUp();
+                //Jotxt = "Stick Advances!!!";
+                var stkUp = ["Stick Sharpens!!!","Stick Upgrades!!!"];
+                Jotxt = possibleAnswers(stkUp);
+                Entxt ="";
+                
+
+            }
+            else {
+                Jotxt = "You need more IMs";
+                Entxt ="";
+            }
+            }
+            //ANI upgrade button
+        else if (gameStarted && !atPark && IMmenu && !ANImenu && !ELEmenu && cursorPos.x > (width / 2) + 77 && cursorPos.x < (width / 2) + 200 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            //click ANI to upgrade ANI unless ANI is not picked and you have enough IM points
+            if(IM >= IMneededANI && !aniSelected){
+                ANImenu = true;
+                Jotxt = "Choose an Animal";
+                Entxt ="";
+            }
+            else if(IMneededANI == 0){
+                Jotxt = "Animal Full Beast";
+                Entxt ="";
+            }
+            else if(IM < IMneededANI){
+                Jotxt = "You need more IMs";
+                Entxt ="";
+            }
+            else {
+                AniUp();
+                Jotxt = "Animal Enhances!";
+                Entxt ="";
+            }
+        }
+        else if (gameStarted && !atPark && IMmenu && !ANImenu && !ELEmenu && cursorPos.x > (width / 2) - 260 && cursorPos.x < (width / 2) - 90 && cursorPos.y > (height / 2) + 177 && cursorPos.y < (height / 2) + 210) {
+            //ELE click to bring up menu if not selected
+            if(IM >= IMneededELE && !eleSelected){
+                ELEmenu = true;
+                Jotxt = "Choose an Element";
+                Entxt ="";
+            }
+            else if(IMneededELE == 0){
+                Jotxt = "Element Mastered!";
+                Entxt ="";
+            }
+            else if(IM < IMneededELE){
+                Jotxt = "You need more IMs";
+                Entxt ="";
+            }
+            else {
+                EleUp();
+                //Jotxt = "More with Nature";
+                Jotxt = "Element Advances";
+                Entxt ="";
+            }
+        }
+        
+        //Picnic Menu
+        else if (gameStarted && atPark && picnic && cursorPos.x > (width / 2) - 70 && cursorPos.x < (width / 2) + 71 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 265) {
+            //After Picnic Button (Main)
+            goToPark();
+            didLevel = false;
+        }
+        else if (gameStarted && atPark && picnic && snack && cursorPos.x > (width / 2) - 200 && cursorPos.x < (width / 2) - 77 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            snackEat();
+            didLevel = false;
+        }
+        else if (gameStarted && atPark && picnic && cursorPos.x > (width / 2) - 260 && cursorPos.x < (width / 2) - 90 && cursorPos.y > (height / 2) + 177 && cursorPos.y < (height / 2) + 210) {
+            candyEat();
+            didLevel = false;
+        }
+        //Sallys Shop
+        else if (gameStarted && atPark && picnic && cursorPos.x > (width / 2) + 77 && cursorPos.x < (width / 2) + 200 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            sally = true;
+            resettxt();
+            sallyHi = possibleAnswers(sallyHey);
+            JotxtColor = "Turquoise";
+            picnic = false;
+            didLevel = false;
+        }
+        //Exit to Park from Sallys
+        else if (gameStarted && atPark && sally && cursorPos.x > (width / 2) - 70 && cursorPos.x < (width / 2) + 71 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 265) {
+            sally = false;
+            goToPark();
+            didLevel = false;
+        }
+        //Sally's Wares
+        else if (gameStarted && atPark && sally && cursorPos.x > (width / 2) - 200 && cursorPos.x < (width / 2) - 77 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            IMsell();
+        }
+        else if (gameStarted && atPark && sally && cursorPos.x > (width / 2) + 77 && cursorPos.x < (width / 2) + 200 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            SnackSell();
+        }
+        else if (gameStarted && atPark && sally && cursorPos.x > (width / 2) - 260 && cursorPos.x < (width / 2) - 90 && cursorPos.y > (height / 2) + 177 && cursorPos.y < (height / 2) + 210) {
+            HPsell();
+        }
+        else if (gameStarted && atPark && sally && cursorPos.x > (width / 2) + 90 && cursorPos.x < (width / 2) + 213 && cursorPos.y > (height / 2) + 177 && cursorPos.y < (height / 2) + 210) {
+            AKsell();
+        }
+        else if (gameStarted && atPark && sally && cursorPos.x > (width / 2) - 200 && cursorPos.x < (width / 2) - 77 && cursorPos.y > (height / 2) + 234 && cursorPos.y < (height / 2) + 267) {
+            DFsell();
+        }
+        else if (gameStarted && atPark && sally && cursorPos.x > (width / 2) + 77 && cursorPos.x < (width / 2) + 200 && cursorPos.y > (height / 2) + 234 && cursorPos.y < (height / 2) + 267) {
+            DGsell();
+        }
+        //Main- Fight!
+        else if (fighting && cursorPos.x > (width / 2) - 70 && cursorPos.x < (width / 2) + 71 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 265) {
+            if (day == 60){
+                var here = ['Fight!','Sleep!'];
+                WakeUp = possibleAnswers(here);
+            }
+            runFail = false;
+            fight(); 
+            //ctx.fillText('You fignt', width / 2 - 265, height / 2 - 200);
+        }
+        //Run Fail
+        else if (fighting && cursorPos.x > (width / 2) + 77 && cursorPos.x < (width / 2) + 200 && cursorPos.y > (height / 2) + 234 && cursorPos.y < (height / 2) + 267) {
+            runAway();
+            //ctx.fillText('You failed to run', width / 2 - 265, height / 2 - 200);
+        }
+        //Candy button during fight
+        else if (fighting && cursorPos.x > (width / 2) - 260 && cursorPos.x < (width / 2) - 90 && cursorPos.y > (height / 2) + 177 && cursorPos.y < (height / 2) + 210){
+            candyEat();
+        }
+        //Green- day one, choose Stick
+    else if(day == 1 && atPark && !pickUpStick){
+        if (cursorPos.x > (width / 2) - 200 && cursorPos.x < (width / 2) - 77 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            stick = "Sword";
+            stickIS = "Sword";
+            pickUpStick = true;
+            attackBo = 2; JoAttack += 1;
+            dodgeBo = 2; JoDodge += 1;
+        }
+        else if (cursorPos.x > (width / 2) - 260 && cursorPos.x < (width / 2) - 90 && cursorPos.y > (height / 2) + 177 && cursorPos.y < (height / 2) + 210) {
+            stick = "Boomerang";
+            stickIS = "Boomerang";
+            pickUpStick = true;
+            attackBo = 2; JoAttack += 1;
+            defenseBo = 2; JoDefense += 1;
+        }
+        else if (cursorPos.x > (width / 2) - 200 && cursorPos.x < (width / 2) - 77 && cursorPos.y > (height / 2) + 234 && cursorPos.y < (height / 2) + 267) {
+            stick = "Sickle";
+            stickIS = "Sickle";
+            pickUpStick = true;
+            attackBo = 2; JoAttack += 1;
+            healthBo += 2; JoHealth += 2; JoFullHealth += 2;
+        }
+        else if (cursorPos.x > (width / 2) + 77 && cursorPos.x < (width / 2) + 200 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            stick = "Axe";
+            stickIS = "Axe";
+            pickUpStick = true;
+            healthBo += 2; JoHealth += 2; JoFullHealth += 2;
+            defenseBo = 2; JoDefense += 1;
+        }
+        else if (cursorPos.x > (width / 2) + 90 && cursorPos.x < (width / 2) + 213 && cursorPos.y > (height / 2) + 177 && cursorPos.y < (height / 2) + 210) {
+            stick = "Wand";
+            stickIS = "Wand";
+            pickUpStick = true;
+            healthBo += 2; JoHealth += 2; JoFullHealth += 2;
+            dodgeBo = 2; JoDodge += 1;
+        }
+        else if (cursorPos.x > (width / 2) + 77 && cursorPos.x < (width / 2) + 200 && cursorPos.y > (height / 2) + 234 && cursorPos.y < (height / 2) + 267) {
+            stick = "Gun";
+            stickIS = "Gun";
+            pickUpStick = true;
+            defenseBo = 2; JoDefense += 1;
+            dodgeBo = 2; JoDodge += 1;
+        }
+    }
+        //Green ANI selection
+        else if(gameStarted && !atPark && IMmenu && ANImenu && !aniSelected){ 
+           if (cursorPos.x > (width / 2) - 200 && cursorPos.x < (width / 2) - 77 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            //IM == IMneededANI && 
+            ANI = "Dog";
+            ANI_is = "Dog";
+            defenseBo += 1; JoDefense += 1; 
+            dodgeBo += 1; JoDodge += 1;   
+            ANImenu = false;       
+            aniSelected = true;
+            IM -= 1;
+            IMneededANI = 3;
+            }
+        else if (cursorPos.x > (width / 2) - 260 && cursorPos.x < (width / 2) - 90 && cursorPos.y > (height / 2) + 177 && cursorPos.y < (height / 2) + 210) {
+            ANI = "Bird";
+            ANI_is = "Bird";
+            healthBo += 2; JoHealth += 2; JoFullHealth += 2;
+            attackBo += 1; JoAttack += 1;   
+            ANImenu = false;
+            aniSelected = true;
+            IM -= 1;
+            IMneededANI = 3;
+        }
+        else if (cursorPos.x > (width / 2) - 200 && cursorPos.x < (width / 2) - 77 && cursorPos.y > (height / 2) + 234 && cursorPos.y < (height / 2) + 267) {
+            ANI = "Pony";
+            ANI_is = "Pony";
+            healthBo += 2; JoHealth += 2; JoFullHealth += 2;
+            dodgeBo += 1; JoDodge += 1;
+            ANImenu = false;
+            aniSelected = true;
+            IM -= 1;
+            IMneededANI = 3;
+        }
+        else if (cursorPos.x > (width / 2) + 77 && cursorPos.x < (width / 2) + 200 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            ANI = "Bear";
+            ANI_is = "Bear";
+            defenseBo += 1; JoDefense += 1;
+            attackBo += 1; JoAttack += 1;
+            ANImenu = false;
+            aniSelected = true;
+            IM -= 1;
+            IMneededANI = 3;
+        }
+        else if (cursorPos.x > (width / 2) + 90 && cursorPos.x < (width / 2) + 213 && cursorPos.y > (height / 2) + 177 && cursorPos.y < (height / 2) + 210) {
+            ANI = "Cow";
+            ANI_is = "Cow";
+            healthBo += 2; JoHealth += 2; JoFullHealth += 2;
+            defenseBo += 1; JoDefense += 1;
+            ANImenu = false;
+            aniSelected = true;
+            IM -= 1;
+            IMneededANI = 3;
+        }
+        else if (cursorPos.x > (width / 2) + 77 && cursorPos.x < (width / 2) + 200 && cursorPos.y > (height / 2) + 234 && cursorPos.y < (height / 2) + 267) {
+            ANI = "Deer";
+            ANI_is = "Deer";
+            attackBo += 1; JoAttack += 1;
+            dodgeBo += 1; JoDodge += 1;
+            ANImenu = false;
+            aniSelected = true;
+            IM -= 1;
+            IMneededANI = 3;
+        }
+        Jotxt = "Animal Infusion!!";
+        }
+        //Green ELE Selection 
+        else if(gameStarted && !atPark && IMmenu && ELEmenu && !eleSelected){ 
+           if (cursorPos.x > (width / 2) - 200 && cursorPos.x < (width / 2) - 77 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            //IM == IMneededANI && 
+            ELE = "Fire";
+            ELEment = 'Fire';
+            attackBo += 2; JoAttack += 2;   
+            ELEmenu = false;       
+            eleSelected = true;
+            IM -= 1;
+            IMneededELE = 3;
+            }
+        else if (cursorPos.x > (width / 2) - 260 && cursorPos.x < (width / 2) - 90 && cursorPos.y > (height / 2) + 177 && cursorPos.y < (height / 2) + 210) {
+            ELE = "Earth";
+            ELEment = 'Earth';
+            defenseBo += 2; JoDefense += 2;
+            ELEmenu = false;
+            eleSelected = true;
+            IM -= 1;
+            IMneededELE = 3;
+        }
+        else if (cursorPos.x > (width / 2) + 77 && cursorPos.x < (width / 2) + 200 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            ELE = "Water";
+            ELEment = 'Water';
+            healthBo += 4; JoHealth += 4; JoFullHealth += 4;   
+            ELEmenu = false;
+            eleSelected = true;
+            IM -= 1;
+            IMneededELE = 3;
+        }
+        else if (cursorPos.x > (width / 2) + 90 && cursorPos.x < (width / 2) + 213 && cursorPos.y > (height / 2) + 177 && cursorPos.y < (height / 2) + 210) {
+            ELE = "Wind";
+            ELEment = 'Wind';
+            dodgeBo += 2; JoDodge += 2;
+            ELEmenu = false;
+            eleSelected = true;
+            IM -= 1;
+            IMneededELE = 3;
+        }
+        Jotxt = "Elemental Essence!";
+    }
+        //Green- Park Area
+        else if (gameStarted && atPark && pickUpStick && !fighting && !picnic && !sally && day != 10 && day != 20 && day != 30 && day != 40 && day != 50 && day != 60) {
+        if (cursorPos.x > (width / 2) - 200 && cursorPos.x < (width / 2) - 77 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            forest = true;
+            resettxt();
+        }
+        else if (cursorPos.x > (width / 2) - 260 && cursorPos.x < (width / 2) - 90 && cursorPos.y > (height / 2) + 177 && cursorPos.y < (height / 2) + 210) {
+            playground = true;
+            resettxt();
+        }
+        else if (cursorPos.x > (width / 2) - 200 && cursorPos.x < (width / 2) - 77 && cursorPos.y > (height / 2) + 234 && cursorPos.y < (height / 2) + 267) {
+            picnic = true;
+            resettxt();
+            didLevel = false;
+        }
+        else if (cursorPos.x > (width / 2) + 77 && cursorPos.x < (width / 2) + 200 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            feild = true;
+            resettxt();
+        }
+        else if (cursorPos.x > (width / 2) + 90 && cursorPos.x < (width / 2) + 213 && cursorPos.y > (height / 2) + 177 && cursorPos.y < (height / 2) + 210) {
+            court = true;
+            resettxt();
+        }
+        else if (cursorPos.x > (width / 2) + 77 && cursorPos.x < (width / 2) + 200 && cursorPos.y > (height / 2) + 234 && cursorPos.y < (height / 2) + 267) {
+            atPark = false;//Go Home button
+            day += 1;
+            resettxt();
+            didLevel = false;
+        }
+        }
+        
+    else if(gameStarted && atPark && pickUpStick && !fighting && !picnic && !sally && (day == 10 || day == 20 || day == 30 || day == 40 || day == 50 || day == 60)){
+        if(cursorPos.x > (width / 2) - 70 && cursorPos.x < (width / 2) + 71 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 265){
+            nightmare = true; //Main red button "Enter the Hole"
+            }
+    }
+    else if(gameStarted && atPark && pickUpStick && fighting && !picnic && !sally && (day == 10 || day == 20 || day == 30 || day == 40 || day == 50 || day == 60) && snack == true){
+        if(cursorPos.x > (width / 2) - 200 && cursorPos.x < (width / 2) - 77 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            //snack = false; //Snack button during Boss fight
+            //JoHealth = JoFullHealth;
+            snackEat();
+        }
+    }
+    }
+
+/////Hover Effects/////
+    function hoverEffects(e){
+        var cursorPos = getCursorPos(e);
+    //Hover over Green and Red Buttons HIGHLIGHT
+//        if ((!gameStarted && cursorPos.x > (width / 2) - 70 && cursorPos.x < (width / 2) + 71 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 265)
+//                || (gameStarted && !atPark && !IMmenu && cursorPos.x > (width / 2) - 70 && cursorPos.x < (width / 2) + 71 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 265)
+//                    || (fighting && cursorPos.x > (width / 2) - 70 && cursorPos.x < (width / 2) + 71 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 265)
+//                        || (gameStarted && atPark && picnic && cursorPos.x > (width / 2) - 70 && cursorPos.x < (width / 2) + 71 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 265)
+//                            || (gameStarted && atPark && pickUpStick && !fighting && !picnic && (day == 10 || day == 20 || day == 30 || day == 40 || day == 50 || day == 60) && cursorPos.x < (width / 2) + 71 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 265)) {
+//            mainButtColor = '#e94f37'; 
+//            buttonColorTL = "darkgreen";buttonColorML = "darkgreen";buttonColorBL = "darkgreen";buttonColorTR = "darkgreen";buttonColorMR = "darkgreen";buttonColorBR = "darkgreen";
+//        }
+//        else if ((gameStarted && day!=10 && cursorPos.x > (width / 2) - 200 && cursorPos.x < (width / 2) - 77 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153)
+//                    || (fighting && snack && nightmare && cursorPos.x > (width / 2) - 200 && cursorPos.x < (width / 2) - 77 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153)) {
+//            buttonColorTL = "MediumSeaGreen";//Snack at Home, Snack Durring Nightmare Battles, Snackat Park
+//            mainButtColor = 'red';buttonColorML = "darkgreen";buttonColorBL = "darkgreen";buttonColorTR = "darkgreen";buttonColorMR = "darkgreen";buttonColorBR = "darkgreen";
+//        }
+//        else if (atPark && cursorPos.x > (width / 2) - 260 && cursorPos.x < (width / 2) - 90 && cursorPos.y > (height / 2) + 177 && cursorPos.y < (height / 2) + 210) {
+//            buttonColorML = "MediumSeaGreen";//Candy
+//            mainButtColor = 'red';buttonColorTL = "darkgreen";buttonColorBL = "darkgreen";buttonColorTR = "darkgreen";buttonColorMR = "darkgreen";buttonColorBR = "darkgreen";
+//        }
+//        else if (atPark && cursorPos.x > (width / 2) - 200 && cursorPos.x < (width / 2) - 77 && cursorPos.y > (height / 2) + 234 && cursorPos.y < (height / 2) + 267) {
+//            buttonColorBL = "MediumSeaGreen";
+//            mainButtColor = 'red';buttonColorTL = "darkgreen";buttonColorML = "darkgreen";buttonColorTR = "darkgreen";buttonColorMR = "darkgreen";buttonColorBR = "darkgreen";
+//        }
+//        else if (cursorPos.x > (width / 2) + 77 && cursorPos.x < (width / 2) + 200 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+//            buttonColorTR = "MediumSeaGreen";//IM
+//            mainButtColor = 'red';buttonColorTL = "darkgreen";buttonColorML = "darkgreen";buttonColorBL = "darkgreen";buttonColorMR = "darkgreen";buttonColorBR = "darkgreen";
+//        }
+//        else if (atPark && cursorPos.x > (width / 2) + 90 && cursorPos.x < (width / 2) + 213 && cursorPos.y > (height / 2) + 177 && cursorPos.y < (height / 2) + 210) {
+//            buttonColorMR = "MediumSeaGreen";
+//            mainButtColor = 'red';buttonColorTL = "darkgreen";buttonColorML = "darkgreen";buttonColorBL = "darkgreen";buttonColorTR = "darkgreen";buttonColorBR = "darkgreen";
+//        }
+//        else if (atPark && cursorPos.x > (width / 2) + 77 && cursorPos.x < (width / 2) + 200 && cursorPos.y > (height / 2) + 234 && cursorPos.y < (height / 2) + 267) {
+//            buttonColorBR = "MediumSeaGreen";//Back during IM menus, RUN
+//            mainButtColor = 'red';buttonColorTL = "darkgreen";buttonColorML = "darkgreen";buttonColorBL = "darkgreen";buttonColorTR = "darkgreen";buttonColorMR = "darkgreen";
+//        }
+//        else {  mainButtColor = 'red';
+//                buttonColorTL = "darkgreen";
+//                buttonColorML = "darkgreen";
+//                buttonColorBL = "darkgreen";
+//                buttonColorTR = "darkgreen";
+//                buttonColorMR = "darkgreen";
+//                buttonColorBR = "darkgreen";}  
+    //Hover IM Menu//
+    //IM Menu Stick//
+    if (gameStarted && !atPark && IMmenu && !ANImenu && !ELEmenu) {
+        if (stickIS == "Sword" && cursorPos.x > (width / 2) - 200 && cursorPos.x < (width / 2) - 77 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            redIMa = "AK,DG";//Sword+AK+DG
+        }
+        else if (stickIS == "Boomerang" && cursorPos.x > (width / 2) - 200 && cursorPos.x < (width / 2) - 77 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            redIMa = "AK,DF";//Boomer+AK+DF
+        }
+        else if (stickIS == "Sickle" && cursorPos.x > (width / 2) - 200 && cursorPos.x < (width / 2) - 77 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            redIMa = "AK,HP";//Sickle+AK+HP
+        }
+        else if (stickIS == "Axe" && cursorPos.x > (width / 2) - 200 && cursorPos.x < (width / 2) - 77 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            redIMa = "HP,DF";//Axe+HP+DF
+        }
+        else if (stickIS == "Wand" && cursorPos.x > (width / 2) - 200 && cursorPos.x < (width / 2) - 77 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            redIMa = "HP,DG";//Wand+HP+DG
+        }
+        else if (stickIS == "Gun" && cursorPos.x > (width / 2) - 200 && cursorPos.x < (width / 2) - 77 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            redIMa = "DF,DG";//Gun+DF+DG
+        }
+        
+        //else if (aniSelected) {
+            else if (ANI_is == "Dog" && cursorPos.x > (width / 2) + 77 && cursorPos.x < (width / 2) + 200 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+                redIMa = "DF,DG";//Dog+DG+DF
+            }
+            else if (ANI_is == "Bird" && cursorPos.x > (width / 2) + 77 && cursorPos.x < (width / 2) + 200 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+                redIMa = "HP,AK";//Bird+HP+AK
+            }
+            else if (ANI_is == "Pony" && cursorPos.x > (width / 2) + 77 && cursorPos.x < (width / 2) + 200 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+                redIMa = "HP,DG";//Pony+HP+DG
+            }
+            else if (ANI_is == "Bear" && cursorPos.x > (width / 2) + 77 && cursorPos.x < (width / 2) + 200 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+                redIMa = "AK,DF";//Bear+DF+AK
+            }
+            else if (ANI_is == "Cow" && cursorPos.x > (width / 2) + 77 && cursorPos.x < (width / 2) + 200 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+                redIMa = "HP,DF";//Cow+HP+DF
+            }
+            else if (ANI_is == "Deer" && cursorPos.x > (width / 2) + 77 && cursorPos.x < (width / 2) + 200 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+                redIMa = "AK,DG";//Deer+AK+DG
+            }
+            //else {redIM = ""; redIMa = "";}
+        //}
+        
+        //else if (eleSelected) {
+            else if(ELEment == "Fire" && cursorPos.x > (width / 2) - 260 && cursorPos.x < (width / 2) - 90 && cursorPos.y > (height / 2) + 177 && cursorPos.y < (height / 2) + 210) {
+                redIM = "AK+"; //Fire+
+            }
+            else if (ELEment == "Earth" && cursorPos.x > (width / 2) - 260 && cursorPos.x < (width / 2) - 90 && cursorPos.y > (height / 2) + 177 && cursorPos.y < (height / 2) + 210) {
+                redIM = "DF+"; //Earth+ //Error- uses Boomerrang square
+            }
+            else if (ELEment == "Water" && cursorPos.x > (width / 2) - 260 && cursorPos.x < (width / 2) - 90 && cursorPos.y > (height / 2) + 177 && cursorPos.y < (height / 2) + 210) {
+                redIM = "HP+"; //Water+
+            }
+            else if (ELEment == "Wind" && cursorPos.x > (width / 2) - 260 && cursorPos.x < (width / 2) - 90 && cursorPos.y > (height / 2) + 177 && cursorPos.y < (height / 2) + 210) {
+                redIM = "DG+"; //Wind+
+            }
+        //else {redIM = "";}
+        //}
+    else {redIM = ""; redIMa = "";}
+    }
+        
+    //Hover Stick Selection//
+    else if(day == 1 && atPark && !pickUpStick){
+        if (cursorPos.x > (width / 2) - 200 && cursorPos.x < (width / 2) - 77 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            redIM = "AK,DG";//Sword+AK+DG
+        }
+        else if (cursorPos.x > (width / 2) - 260 && cursorPos.x < (width / 2) - 90 && cursorPos.y > (height / 2) + 177 && cursorPos.y < (height / 2) + 210) {
+            redIM = "AK,DF";//Boomer+AK+DF
+        }
+        else if (cursorPos.x > (width / 2) - 200 && cursorPos.x < (width / 2) - 77 && cursorPos.y > (height / 2) + 234 && cursorPos.y < (height / 2) + 267) {
+            redIM = "AK,HP";//Sickle+AK+HP
+        }
+        else if (cursorPos.x > (width / 2) + 77 && cursorPos.x < (width / 2) + 200 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            redIM = "HP,DF";//Axe+HP+DF
+        }
+        else if (cursorPos.x > (width / 2) + 90 && cursorPos.x < (width / 2) + 213 && cursorPos.y > (height / 2) + 177 && cursorPos.y < (height / 2) + 210) {
+            redIM = "HP,DG";//Wand+HP+DG
+        }
+        else if (cursorPos.x > (width / 2) + 77 && cursorPos.x < (width / 2) + 200 && cursorPos.y > (height / 2) + 234 && cursorPos.y < (height / 2) + 267) {
+            redIM = "DF,DG";//Gun+DF+DG
+        }
+        else {redIM = "";}
+    }
+    
+    //Hover ANI Selection//
+    else if(gameStarted && !atPark && IMmenu && ANImenu && !aniSelected){
+        if (cursorPos.x > (width / 2) - 200 && cursorPos.x < (width / 2) - 77 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) { 
+            redIMa = "DF,DG";//Dog+DG+DF
+        }
+        else if (cursorPos.x > (width / 2) - 260 && cursorPos.x < (width / 2) - 90 && cursorPos.y > (height / 2) + 177 && cursorPos.y < (height / 2) + 210) {
+            redIMa = "HP,AK";//Bird+HP+AK
+        }
+        else if (cursorPos.x > (width / 2) - 200 && cursorPos.x < (width / 2) - 77 && cursorPos.y > (height / 2) + 234 && cursorPos.y < (height / 2) + 267) {
+            redIMa = "HP,DG";//Pony+HP+DG
+        }
+        else if (cursorPos.x > (width / 2) + 77 && cursorPos.x < (width / 2) + 200 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            redIMa = "AK,DF";//Bear+DF+AK
+        }
+        else if (cursorPos.x > (width / 2) + 90 && cursorPos.x < (width / 2) + 213 && cursorPos.y > (height / 2) + 177 && cursorPos.y < (height / 2) + 210) {
+            redIMa = "HP,DF";//Cow+HP+DF
+        }
+        else if (cursorPos.x > (width / 2) + 77 && cursorPos.x < (width / 2) + 200 && cursorPos.y > (height / 2) + 234 && cursorPos.y < (height / 2) + 267) {
+            redIMa = "AK,DG";//Deer+AK+DG
+        }
+        else {redIMa = "";}
+    }
+    //Hover ELE Selection//
+    else if(gameStarted && !atPark && IMmenu && ELEmenu && !eleSelected){
+        if(cursorPos.x > (width / 2) - 200 && cursorPos.x < (width / 2) - 77 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            redIM = "AK+"; //Fire+
+        }
+        else if (cursorPos.x > (width / 2) - 260 && cursorPos.x < (width / 2) - 90 && cursorPos.y > (height / 2) + 177 && cursorPos.y < (height / 2) + 210) {
+            redIM = "DF+"; //Earth+ //Error- uses Boomerrang square
+        }
+        else if (cursorPos.x > (width / 2) + 77 && cursorPos.x < (width / 2) + 200 && cursorPos.y > (height / 2) + 120 && cursorPos.y < (height / 2) + 153) {
+            redIM = "HP+"; //Water+
+            
+        }
+        else if (cursorPos.x > (width / 2) + 90 && cursorPos.x < (width / 2) + 213 && cursorPos.y > (height / 2) + 177 && cursorPos.y < (height / 2) + 210) {
+            redIM = "DG+"; //Wind+
+            
+        }
+        else {redIM = "";}
+    }
+    else {redIM = ""; redIMa = "";}
+    }
+//holds the cursors position
+function cursorPosition(x, y) {
+    this.x = x;
+    this.y = y;
+}
+    function getCursorPos(e) {
+    var x; 
+    var y;
+    if (e.pageX || e.pageY) {
+        x = e.pageX;
+        y = e.pageY;
+    } else {
+        x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+        y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+    }
+    x -= canvas.offsetLeft;
+    y -= canvas.offsetTop;
+    var cursorPos = new cursorPosition(x, y);
+    return cursorPos;
+}
+ 
+    window.onload = init;
+
+
+    </script>
+    </head>
+    
+    <body>
+        <canvas id="canvas" width="600" height="600"></canvas>
+        <img src="JonnyMedia/placeholder.png" alt=""/> 
+    </body>
+</html>
