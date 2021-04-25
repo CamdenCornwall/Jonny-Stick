@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Welcome to the Example Hub</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script>
+            
+            function array() {
+                var innumber = document.getElementById("getNumber").value;
+                var array = [];
+                
+                for(i = 1; i <= innumber; i++){
+                    array.push(i);
+                    
+                }
+                document.getElementById("outNumber").innerHTML = array; 
+            } 
+            
+            
+            
+            
+            function f(){
+                var fibi = document.getElementById("fib").value;
+                var a = 0;
+                var b = 1;
+                var ab;
+                var array = [];
+
+                    while (fibi >= 0){
+                        ab = a;
+                        a = a+b;
+                        b = ab;
+                        fibi--;
+                        array.push(b); 
+                    }
+                document.getElementById("fibTo").innerHTML = array;
+            }
+            
+            
+            function rev(){
+                var string = document.getElementById("string").value;
+                var split = string.split("");
+                var reverse = split.reverse();
+                var join = reverse.join("");
+                
+                
+                
+                document.getElementById("revString").innerHTML = join;
+            }
+            
+            
+            function e_mail(){
+                var mail = document.getElementById("mail").value;
+                
+                var email = mail + "@gmail.com";
+                
+                document.getElementById("email").innerHTML = email;
+            }
+            
+           
+            
+            
+            
+            
+            
+            
+            
+        </script>
+    </head>
+    
+    
+    
+    
+    
+    <body>
+        
+        <h1>TIPS:</h1>
+        <textarea rows="10" cols="75">
+<link rel="stylesheet" type="CSS/text" href="CSS/mycss.css">
+
+<script src="myscript.js"></script>
+
+== and ===
+0 == false # true
+0 === false # false
+2 == "2" # true
+2 === "2" # false
+        </textarea><br><br>
+        ul
+        <ul>
+            <li>Cow</li>
+            <li>Pig</li>
+        </ul>
+        ol
+        <ol>
+            <li>Cow</li>
+            <li>Pig</li>
+        </ol>
+        
+        
+        <h1>Array MAKER</h1>
+        Input a number: <input id="getNumber" type="text">
+        <button onclick="array()">Submit</button>
+        <p id="outNumber"></p>
+        
+         <textarea rows="17" cols="75">
+<h1>Array MAKER</h1>
+Input a number: <input id="getNumber" type="text">
+<button onclick="array()">Submit</button>
+<p id="outNumber"></p>
+
+
+function array() {
+    var innumber = document.getElementById("getNumber").value;
+    var array = [];
+                
+    for(i = 1; i <= innumber; i++){
+                    array.push(i);
+                    
+    }
+    document.getElementById("outNumber").innerHTML = array; 
+}
+        </textarea> 
+        
+        <hr>
+        
+        <h1>Fibi MAKER</h1>
+        Input a number to fib to: <input id="fib" type="text">
+        <button onclick="f()">Submit</button>
+        <p id="fibTo"></p>
+        
+        <textarea rows="22" cols="75">
+<h1>Fibi MAKER</h1>
+Input a number to fib to: <input id="fib" type="text">
+<button onclick="f()">Submit</button>
+<p id="fibTo"></p> 
+
+
+function f(){
+    var fibi = document.getElementById("fib").value;
+    var a = 0;
+    var b = 1;
+    var ab;
+    var array = [];
+
+    while (fibi >= 0){
+        ab = a;
+        a = a+b;
+        b = ab;
+        fibi--;
+        array.push(b); 
+    }
+    document.getElementById("fibTo").innerHTML = array;
+}    
+        </textarea>
+        
+        <hr>
+    
+        
+        
+        <h1>String REVERSE</h1>
+        Input a string: <input id="string" type="text">
+        <button onclick="rev()">Submit</button>
+        <p id="revString"></p>
+        
+                 <textarea rows="17" cols="75">
+<h1>String REVERSE</h1>
+Input a string: <input id="string" type="text">
+<button onclick="rev()">Submit</button>
+<p id="revString"></p>
+
+
+function rev(){
+    var string = document.getElementById("string").value;
+    var split = string.split("");
+    var reverse = split.reverse();
+    var join = reverse.join("");
+                
+    document.getElementById("revString").innerHTML = join;
+    }
+}
+        </textarea>
+        
+        <hr>
+        
+        
+        
+        <h1>Append to String (Make Email)</h1>
+        Input a name: <input id="mail" type="text">
+        <button onclick="e_mail()">Submit</button>
+        <p id="email"></p>
+        
+                         <textarea rows="15" cols="75">
+<h1>Append to String (Make Email)</h1>
+Input a name: <input id="mail" type="text">
+<button onclick="e_mail()">Submit</button>
+<p id="email"></p>
+
+
+function e_mail(){
+    var mail = document.getElementById("mail").value;
+                
+    var email = mail + "@gmail.com";
+                
+    document.getElementById("email").innerHTML = email;
+}
+        </textarea>
+        
+        <hr>
+        
+
+        <h1>Array Sorter</h1>
+                         <textarea rows="5" cols="75">
+function arrayF(){
+    var array = [2,5,7,9,0];
+    array.sort();
+    
+}
+        </textarea>
+        
+        
+        
+        <h1>Remove from array</h1>
+        <textarea rows="17" cols="75">
+function remove(){
+    var array = [0,1,2,3,4,5,6,7,8,9];
+    array.splice(0,1); //Here at 0 remove 1 array //(this includes itself)
+    array.splice(2,3); //Here at 2 remove 3 array //(this includes itself)
+    
+}
+
+function removeThisNumber(){
+    var number = document.getElementById("thisNumber").value;
+    var array = [1,1,1,1,2,2,2,2,3,3,3,3,0];
+    for(var i = array.length - 1; i >= 0; i--) {
+        if(array[i] == number) {
+        array.splice(i, 1);
+    }
+}
+    document.getElementById("out").innerHTML = array;
+}
+        </textarea>
+        
+        
+        <br><br>
+    </body>
+    
+    
+</html>
+
+
