@@ -21,7 +21,15 @@ and open the template in the editor.
                 }
                 document.getElementById("outNumber").innerHTML = array; 
             } 
+
+
             
+            function count() {
+                var text = document.getElementById("getString").value;
+                var number = text.length;
+
+                document.getElementById("outCount").innerHTML = number; 
+            }
             
             
             
@@ -127,6 +135,32 @@ function array() {
     document.getElementById("outNumber").innerHTML = array; 
 }
         </textarea> 
+
+
+
+<h1>String COUNTER</h1>
+Input a string: <input id="getString" type="text">
+<button onclick="count()">Submit</button>
+<p id="outCount"></p>
+
+
+<textarea>
+<h1>String COUNTER</h1>
+Input a string: <input id="getString" type="text">
+<button onclick="count()">Submit</button>
+<p id="outCount"></p>
+
+function count() {
+    var text = document.getElementById("getString").value;
+    var number = text.length;
+
+    document.getElementById("outCount").innerHTML = number; 
+}
+</textarea>
+
+
+
+        
         
         <hr>
         
